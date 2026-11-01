@@ -229,8 +229,8 @@ API settings (saved in SQLite), connection test, model list, game wizard with **
 ### 🪟 Windows — one click / با یک کلیک
 
 ```bat
-git clone https://github.com/deveguru/ai-playground.git
-cd ai-playground
+git clone https://github.com/deveguru/AI-Civilization-Arena.git
+cd AI-Civilization-Arena
 start.bat
 ```
 
@@ -243,16 +243,16 @@ start.bat
 ### 🐧 Linux / 🍎 macOS
 
 ```bash
-git clone https://github.com/deveguru/ai-playground.git
-cd ai-playground
+git clone https://github.com/deveguru/AI-Civilization-Arena.git
+cd AI-Civilization-Arena
 ./start.sh
 ```
 
 ### 🐳 Docker
 
 ```bash
-git clone https://github.com/deveguru/ai-playground.git
-cd ai-playground
+git clone https://github.com/deveguru/AI-Civilization-Arena.git
+cd AI-Civilization-Arena
 docker compose up -d --build
 ```
 
@@ -443,7 +443,7 @@ sequenceDiagram
 ## 🏗️ Architecture &nbsp;·&nbsp; معماری
 
 ```
-ai-playground/
+AI-Civilization-Arena/
 ├── run.py · start.bat · start.sh · Dockerfile · docker-compose.yml
 └── civarena/
     ├── rules.py       # terrain, techs, units, buildings, personalities
@@ -483,8 +483,8 @@ ai-playground/
 <summary><b>systemd + nginx</b></summary>
 
 ```bash
-sudo git clone https://github.com/deveguru/ai-playground.git /opt/ai-playground
-cd /opt/ai-playground && sudo python3 -m venv .venv && sudo .venv/bin/pip install -r requirements.txt
+sudo git clone https://github.com/deveguru/AI-Civilization-Arena.git /opt/AI-Civilization-Arena
+cd /opt/AI-Civilization-Arena && sudo python3 -m venv .venv && sudo .venv/bin/pip install -r requirements.txt
 ```
 
 ```ini
@@ -494,8 +494,8 @@ Description=AI Civilization Arena
 After=network.target
 
 [Service]
-WorkingDirectory=/opt/ai-playground
-ExecStart=/opt/ai-playground/.venv/bin/python run.py --host 127.0.0.1 --port 8080
+WorkingDirectory=/opt/AI-Civilization-Arena
+ExecStart=/opt/AI-Civilization-Arena/.venv/bin/python run.py --host 127.0.0.1 --port 8080
 Restart=always
 Environment=PYTHONIOENCODING=utf-8
 
