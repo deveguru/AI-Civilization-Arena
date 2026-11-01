@@ -27,7 +27,16 @@ CREATE TABLE IF NOT EXISTS stats (
   game_id INTEGER, turn INTEGER, civ INTEGER, score INTEGER, pop INTEGER, cities INTEGER,
   military REAL, techs INTEGER, gold INTEGER);
 CREATE INDEX IF NOT EXISTS ix_stats ON stats(game_id, turn);
+CREATE TABLE IF NOT EXISTS chats (
+  id INTEGER PRIMARY KEY AUTOINCREMENT, game_id INTEGER, civ INTEGER, role TEXT, content TEXT,
+  model TEXT, turn INTEGER, ip TEXT, ms INTEGER, ts REAL);
+CREATE INDEX IF NOT EXISTS ix_chats ON chats(game_id, civ, id);
 """
+
+MIGRATIONS = [
+    ("thoughts", "focus", "TEXT"),
+    ("thoughts", "cats", "TEXT"),
+]
 
 
 def init(path):
@@ -37,6 +46,10 @@ def init(path):
     _conn.row_factory = sqlite3.Row
     _conn.execute("PRAGMA journal_mode=WAL")
     _conn.executescript(SCHEMA)
+    for table, col, typ in MIGRATIONS:
+        cols = {r[1] for r in _conn.execute(f"PRAGMA table_info({table})")}
+        if col not in cols:
+            _conn.execute(f"ALTER TABLE {table} ADD COLUMN {col} {typ}")
     _conn.commit()
 
 
@@ -75,6 +88,9 @@ DEFAULTS = {
     "models_cache": "[]",
     "default_think_every": "2",
     "default_turn_delay": "1.5",
+    "chat_public": "0",
+    "chat_rpm": "6",
+    "chat_max_tokens": "1200",
 }
 
 
@@ -129,7 +145,7 @@ def list_games():
 
 
 def delete_game(gid):
-    for t in ("events", "thoughts", "stats"):
+    for t in ("events", "thoughts", "stats", "chats"):
         x(f"DELETE FROM {t} WHERE game_id=?", (gid,))
     x("DELETE FROM games WHERE id=?", (gid,))
 
@@ -150,3 +166,13 @@ def add_thought(gid, **t):
 def add_stats(gid, turn, rows):
     many("INSERT INTO stats(game_id,turn,civ,score,pop,cities,military,techs,gold) VALUES(?,?,?,?,?,?,?,?,?)",
          [(gid, turn, r["civ"], r["score"], r["pop"], r["cities"], r["military"], r["techs"], r["gold"]) for r in rows])
+
+
+def add_chat(gid, civ, role, content, **kw):
+    return x("INSERT INTO chats(game_id,civ,role,content,model,turn,ip,ms,ts) VALUES(?,?,?,?,?,?,?,?,?)",
+             (gid, civ, role, content, kw.get("model"), kw.get("turn"), kw.get("ip"), kw.get("ms"), time.time()))
+
+
+def get_chats(gid, civ, limit=60):
+    return q("SELECT id,role,content,model,turn,ms,ts FROM chats WHERE game_id=? AND civ=? ORDER BY id DESC LIMIT ?",
+             (gid, civ, limit))[::-1]

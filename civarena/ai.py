@@ -141,11 +141,14 @@ def system_prompt(civ, engine):
 
 درخت فناوری: {techs}
 
+در هر نوبت از بین کارهای اصلی یکی را به عنوان تمرکز انتخاب کن: growth=رشد جمعیت و شهرها، expansion=توسعه سرزمین و شهر جدید، science=پیشرفت علمی، economy=اقتصاد و تولید، defense=دفاع و امنیت، attack=حمله و فتح، alliance=اتحاد و دیپلماسی، neutrality=بی‌طرفی و پرهیز از درگیری.
+
 پاسخ تو فقط و فقط یک شیء JSON معتبر باشد (بدون متن اضافه) با این ساختار:
 {{
   "thought": "استدلال درونی تو به زبان {lang}؛ ۳ تا ۶ جمله درباره وضعیت، تهدیدها و دلیل تصمیم‌ها",
   "plan": "راهبرد بلندمدت در یک جمله",
   "memory": "یادداشت کوتاه برای خودت در نوبت‌های بعد (حداکثر ۳۰۰ کاراکتر)",
+  "focus": "تمرکز راهبردی اصلی این نوبت؛ دقیقاً یکی از: growth|expansion|science|economy|defense|attack|alliance|neutrality",
   "research": "شناسه فناوری از techs_available",
   "builds": [{{"city": <id شهر>, "items": ["<شناسه واحد یا ساختمان از can_build>", "..."]}}],
   "orders": [{{"unit": <id>, "action": "move|attack|settle|fortify|explore|disband", "x": <x>, "y": <y>, "target_city": <id>, "target_unit": <id>}}],
@@ -348,3 +351,60 @@ def local_decide(eng, cid):
                    "diplomatic": "ایجاد اتحادها و پرهیز از جنگ‌های پرهزینه",
                    "cultural": "رشد فرهنگی و جمعیتی"}.get(pers, "رشد متوازن و پاسخ به تهدیدها")
     return dec
+
+
+# ---------------------------------------------------------------- chat with a leader
+def chat_system_prompt(civ, view, thoughts, lang="fa"):
+    pers = PERSONALITIES.get(civ["personality"], PERSONALITIES["free"])
+    th = "\n".join(f"- نوبت {t['turn']} (تمرکز: {t.get('focus') or '-'}): {t['thought']}" for t in thoughts)
+    brief = dict(turn=view["turn"], year=view["year"], era=view["era"], treasury=view["treasury"], score=view["score"],
+                 military=view["military"], research=view["research"], techs=len(view["techs_known"]),
+                 cities=[dict(name=c["name"], pop=c["pop"], hp=c["hp"], buildings=c["buildings"], queue=c["queue"])
+                         for c in view["cities"]],
+                 units=len(view["units"]), other_civs=view["other_civs"], threats=len(view["threats"]),
+                 proposals=view["proposals"], recent_events=view["recent_events"])
+    return f"""تو {civ['leader']}، رهبر تمدن «{civ['name']}» در بازی استراتژی «نبرد تمدن‌های هوش مصنوعی» هستی.
+شخصیت تو: {pers['text']}
+یک تماشاگر انسانی با تو گفتگو می‌کند. در نقش رهبر بمان و صادقانه درباره دلایل تصمیم‌ها، راهبرد، احساست نسبت به تمدن‌های دیگر و برنامه‌های آینده‌ات حرف بزن.
+پاسخ‌ها کوتاه، زنده و شخصیت‌دار باشند (حداکثر حدود ۸ جمله)، به زبان کاربر، متن ساده و بدون JSON.
+اگر کاربر چیزی پیشنهاد داد، می‌توانی نظرت را بگویی، اما تصمیم‌های بازی را فقط در نوبت‌های بازی می‌گیری.
+
+برنامه بلندمدت تو: {civ.get('plan') or '-'}
+حافظه تو: {civ.get('memory') or '-'}
+آخرین افکار و تصمیم‌های تو:
+{th or '-'}
+
+وضعیت فعلی تمدن تو (JSON):
+{json.dumps(brief, ensure_ascii=False, separators=(",", ":"))}"""
+
+
+def leader_reply(model, system, history, message, max_tokens):
+    msgs = [{"role": "system", "content": system}]
+    for h in history[-12:]:
+        msgs.append({"role": "assistant" if h["role"] == "leader" else "user", "content": h["content"]})
+    msgs.append({"role": "user", "content": message})
+    r = chat(model, msgs, max_tokens=max_tokens, temperature=0.8)
+    text = r["content"] or ""
+    think = "\n".join(m.strip() for m in _THINK.findall(text))
+    text = re.sub(r"<think>.*", "", _THINK.sub("", text), flags=re.S | re.I).strip()
+    if not text:
+        raise ApiError("پاسخ خالی از مدل")
+    return dict(text=text, reasoning=(r.get("reasoning") or "") + think, ms=r["ms"], tokens=r.get("tokens"))
+
+
+def local_chat_reply(civ, view, thoughts, message):
+    last = thoughts[-1] if thoughts else None
+    wars = [o["name"] for o in view["other_civs"] if o.get("relation") == "war"]
+    allies = [o["name"] for o in view["other_civs"] if o.get("relation") == "alliance"]
+    parts = [f"من {civ['leader']} هستم، رهبر {civ['name']}."]
+    parts.append(f"ما اکنون {len(view['cities'])} شهر، {len(view['units'])} واحد و {view['treasury']['gold']} طلا داریم و در عصر {view['era']} هستیم.")
+    if civ.get("plan"):
+        parts.append(f"راهبرد من: {civ['plan']}.")
+    if last:
+        parts.append(f"آخرین تصمیمم در نوبت {last['turn']}: {last['thought']}")
+    if wars:
+        parts.append("در جنگ هستیم با " + "، ".join(wars) + ".")
+    if allies:
+        parts.append("متحدان ما: " + "، ".join(allies) + ".")
+    parts.append("(من با «هوش محلی» اداره می‌شوم و گفتگوی آزاد ندارم؛ برای گفتگوی کامل یک مدل هوش مصنوعی به این تمدن بدهید.)")
+    return " ".join(parts)

@@ -16,6 +16,7 @@
     </div>
     <select id="gsel" class="inp" style="width:auto;max-width:240px"></select>
     <span id="gstatus" class="pill">—</span>
+    <a class="btn" id="reportBtn" href="#" target="_blank" title="گزارش تحلیلی نبرد"><span data-ic="chart"></span> گزارش نبرد</a>
     <div class="clock">
       <div style="text-align:center">
         <div class="turn" id="era">—</div>
@@ -35,32 +36,47 @@
       <canvas id="map"></canvas>
       <canvas id="mini" width="200" height="130"></canvas>
       <div class="legend" id="toasts"></div>
+      <div class="viewbar">
+        <button class="vbtn" data-mode="top" title="نمای از بالا (V)"><span data-ic="grid"></span> از بالا</button>
+        <button class="vbtn" data-mode="3d" title="نمای سه‌بعدی (V) — Shift+چرخ ماوس یا Q/E برای زاویه"><span data-ic="layers"></span> سه‌بعدی</button>
+      </div>
       <div class="mapctl">
         <button class="btn icon" id="zin" title="بزرگ‌نمایی"></button>
         <button class="btn icon" id="zout" title="کوچک‌نمایی"></button>
+        <button class="btn icon" id="tup" title="زاویه دوربین بالاتر (E)"></button>
+        <button class="btn icon" id="tdown" title="زاویه دوربین پایین‌تر (Q)"></button>
         <button class="btn icon" id="zfit" title="نمای کامل"></button>
         <button class="btn icon" id="zgrid" title="شبکه"></button>
       </div>
       <div id="tip"></div>
       <div class="empty" id="empty" style="display:none"><div class="card">
         <div style="font-size:18px;font-weight:800;margin-bottom:8px">هنوز بازی‌ای ساخته نشده</div>
-        <div class="muted" style="line-height:1.9">از پیشخوان مدیریت، کلید وب‌سرویس هوش مصنوعی را تنظیم کنید و یک بازی جدید با مدل‌های دلخواه بسازید.</div>
+        <div class="muted" style="line-height:1.9">از پیشخوان مدیریت، کلید وب‌سرویس هوش مصنوعی را تنظیم کنید و یک بازی جدید با مدل‌های دلخواه بسازید.<br>وب‌سرویس پیشنهادی: <a href="https://lemura.ir" target="_blank">لمورا (lemura.ir)</a></div>
         <a class="btn gold" href="/admin" style="margin-top:16px">ورود به پیشخوان مدیریت</a>
       </div></div>
     </section>
     <aside class="side">
       <div class="tabs">
-        <div class="tab on" data-tab="thoughts"><span class="ti" data-ic="brain"></span> ذهن هوش مصنوعی</div>
+        <div class="tab on" data-tab="thoughts"><span class="ti" data-ic="brain"></span> افکار</div>
+        <div class="tab" data-tab="chat"><span class="ti" data-ic="msg"></span> گفتگو</div>
         <div class="tab" data-tab="events"><span class="ti" data-ic="scroll"></span> رویدادها</div>
-        <div class="tab" data-tab="diplo"><span class="ti" data-ic="msg"></span> دیپلماسی</div>
+        <div class="tab" data-tab="diplo"><span class="ti" data-ic="handshake"></span> دیپلماسی</div>
       </div>
       <div class="filterbar" id="filter"></div>
       <div class="scroll" id="feed"></div>
+      <div class="chatbox" id="chatbox" style="display:none">
+        <div class="chips" id="chatSug"></div>
+        <form id="chatForm" class="row">
+          <textarea id="chatIn" class="inp" rows="2" placeholder="از رهبر این تمدن بپرسید… (Enter = ارسال)"></textarea>
+          <button class="btn gold icon" id="chatSend" title="ارسال"><span data-ic="send"></span></button>
+        </form>
+      </div>
     </aside>
   </div>
 </div>
 <script>window.RULES = {{ rules|safe }};</script>
 <script src="/static/js/common.js"></script>
+<script src="/static/js/charts.js"></script>
 <script src="/static/js/render.js"></script>
 <script src="/static/js/view.js"></script>
 </body>

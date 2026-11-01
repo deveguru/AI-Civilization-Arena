@@ -1,21 +1,40 @@
-MIT License
+AI Civilization Arena — Personal Use License
+Copyright (c) 2026 deveguru. All rights reserved.
 
-Copyright (c) 2026 deveguru
+1. Grant. You may download, install, run and modify this software free of charge
+   for your own personal, non-commercial use (including personal study, research,
+   experiments and private entertainment).
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+2. Restrictions. Without prior written permission from the copyright holder you may NOT:
+   a) use the software, or any part or modified version of it, for any commercial
+      purpose, including offering it as a paid or ad-supported service, selling it,
+      or using it inside a commercial product or for a client;
+   b) redistribute, sublicense, sell, rent or publish the software or modified
+      versions of it, in source or binary form, except by linking to the original
+      repository (https://github.com/deveguru/ai-playground);
+   c) remove or alter this license or the copyright notice.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+3. Forks. Forking on GitHub for personal use and for submitting contributions
+   (pull requests) back to the original repository is allowed. Contributions are
+   provided under the same terms as this license.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+4. No warranty. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM,
+   DAMAGES OR OTHER LIABILITY ARISING FROM THE USE OF THE SOFTWARE. Costs of any
+   third-party AI service used with the software are your own responsibility.
+
+For commercial licensing, open an issue in the repository.
+
+---------------------------------------------------------------------------------
+
+مجوز استفاده شخصی — نبرد تمدن‌های هوش مصنوعی
+کلیه حقوق برای deveguru محفوظ است.
+
+۱. اجازه: دانلود، نصب، اجرا و تغییر این نرم‌افزار فقط برای استفاده شخصی و غیرتجاری
+   (یادگیری، پژوهش، آزمایش و سرگرمی شخصی) به‌صورت رایگان مجاز است.
+۲. محدودیت‌ها: بدون اجازه کتبی صاحب اثر، هرگونه استفاده تجاری (فروش، ارائه به‌عنوان
+   سرویس پولی یا تبلیغاتی، استفاده در محصول یا پروژه مشتری)، بازنشر، فروش یا انتشار نسخه
+   اصلی یا تغییریافته و حذف این مجوز ممنوع است. معرفی پروژه با لینک به مخزن اصلی آزاد است.
+۳. فورک برای استفاده شخصی و ارسال Pull Request به مخزن اصلی مجاز است.
+۴. نرم‌افزار «همان‌طور که هست» و بدون هیچ ضمانتی ارائه می‌شود. هزینه سرویس‌های هوش مصنوعی
+   به عهده کاربر است.

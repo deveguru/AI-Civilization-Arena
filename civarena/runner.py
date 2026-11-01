@@ -6,7 +6,7 @@ import time
 import traceback
 from concurrent.futures import ThreadPoolExecutor, wait
 
-from . import ai, db
+from . import ai, analysis, db
 from .engine import Engine
 from .rules import MODEL_LOCAL
 
@@ -149,11 +149,13 @@ class GameHandle:
                 st = civ["ai"]
                 if model == MODEL_LOCAL:
                     dec = ai.local_decide(eng, cid)
+                    norm, focus = analysis.record(eng, cid, dec)
                     errs, done = eng.apply_decision(cid, dec)
                     db.add_thought(self.gid, turn=eng.s["turn"], civ=cid, model=model, thought=dec["thought"],
                                    plan=dec.get("plan", ""), reasoning="", actions=json.dumps(done, ensure_ascii=False),
                                    errors=json.dumps(errs, ensure_ascii=False), raw=json.dumps(dec, ensure_ascii=False),
-                                   prompt="", ok=1, fallback=0, latency_ms=0, tokens=0)
+                                   prompt="", ok=1, fallback=0, latency_ms=0, tokens=0,
+                                   focus=focus, cats=json.dumps(norm))
                     st["calls"] += 1
                     st["ok"] += 1
                     continue
@@ -162,6 +164,7 @@ class GameHandle:
                 prompt_txt = (sp or "") + "\n\n---\n\n" + ai.user_prompt(view)
                 if kind == "ok":
                     dec = r["decision"]
+                    norm, focus = analysis.record(eng, cid, dec)
                     errs, done = eng.apply_decision(cid, dec)
                     st["ok"] += 1
                     st["tokens"] += r.get("tokens") or 0
@@ -171,13 +174,15 @@ class GameHandle:
                                    reasoning=(r.get("reasoning") or "")[:12000],
                                    actions=json.dumps(done, ensure_ascii=False), errors=json.dumps(errs, ensure_ascii=False),
                                    raw=r["content"][:20000], prompt=prompt_txt[:30000], ok=1, fallback=0,
-                                   latency_ms=r.get("ms", 0), tokens=r.get("tokens", 0))
+                                   latency_ms=r.get("ms", 0), tokens=r.get("tokens", 0),
+                                   focus=focus, cats=json.dumps(norm))
                 else:
                     st["fail"] += 1
                     st["fallback"] += 1
                     dec = ai.local_decide(eng, cid)
+                    norm, focus = analysis.record(eng, cid, dec)
                     errs, done = eng.apply_decision(cid, dec)
-                    db.add_thought(self.gid, turn=eng.s["turn"], civ=cid, model=model,
+                    db.add_thought(self.gid, turn=eng.s["turn"], civ=cid, model=model, focus=focus, cats=json.dumps(norm),
                                    thought="[خطا در ارتباط با مدل؛ تصمیم موقت توسط هوش محلی] " + dec["thought"],
                                    plan=dec.get("plan", ""), reasoning="", actions=json.dumps(done, ensure_ascii=False),
                                    errors=json.dumps([r] + errs, ensure_ascii=False), raw="", prompt=prompt_txt[:30000],

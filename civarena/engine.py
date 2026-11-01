@@ -47,7 +47,7 @@ class Engine:
                 techs=[], relations={}, peace_turn={}, proposals=[], inbox=[], memory="", plan="",
                 met=[], last_errors=[], recent=[], income={}, eliminated_turn=None, score=0,
                 capital=None, ai=dict(calls=0, ok=0, fail=0, fallback=0, tokens=0, ms=0),
-                city_names=[], founded=0,
+                city_names=[], founded=0, tally={}, cats={}, focus={}, timeline=[],
             )
             s["civs"].append(civ)
         for c in s["civs"]:
@@ -124,6 +124,10 @@ class Engine:
             r.append(f"[نوبت {self.s['turn']}] {text}")
             del r[:-MAX_EVENTS_RECENT]
 
+    def tally(self, cid, key, n=1):
+        t = self.civs[cid].setdefault("tally", {})
+        t[key] = t.get(key, 0) + n
+
     def fx(self, kind, **kw):
         kw["k"] = kind
         self.s["fx"].append(kw)
@@ -186,6 +190,7 @@ class Engine:
         c["hp"] = self.city_max_hp(c)
         if not silent:
             self.ev("city", f"{civ['name']} شهر «{c['name']}» را بنا کرد.", civ=cid, x=x, y=y)
+            self.tally(cid, "cities_founded")
             self.fx("found", x=x, y=y, civ=cid)
         return c
 
@@ -488,6 +493,8 @@ class Engine:
             self.ev("battle", f"{UNITS[att['type']]['name']} {aciv['name']} یک {UNITS[df['type']]['name']} از {dciv['name']} را نابود کرد.",
                     civs=[att["civ"], df["civ"]])
             self.fx("kill", x=df["x"], y=df["y"], fx_=att["x"], fy=att["y"], civ=att["civ"])
+            self.tally(att["civ"], "kills")
+            self.tally(df["civ"], "losses")
             if not ranged:
                 att["x"], att["y"] = df["x"], df["y"]
             att["acted"] = True
@@ -506,12 +513,16 @@ class Engine:
         if df["hp"] <= 0:
             self.kill_unit(df)
             txt += " مدافع نابود شد."
+            self.tally(att["civ"], "kills")
+            self.tally(df["civ"], "losses")
             att["vet"] = min(3, att.get("vet", 0) + 1)
             if not ranged and self.passable_for(att["civ"], df["x"], df["y"]):
                 att["x"], att["y"] = df["x"], df["y"]
         if att["hp"] <= 0:
             self.kill_unit(att)
             txt += " مهاجم کشته شد."
+            self.tally(df["civ"], "kills")
+            self.tally(att["civ"], "losses")
         self.ev("battle", txt, civs=[att["civ"], df["civ"]], x=df["x"], y=df["y"])
 
     def attack_city(self, att, city):
@@ -563,6 +574,8 @@ class Engine:
         if was_cap:
             msg += " (پایتخت سقوط کرد)"
         self.ev("capture", msg, civs=[old, new], x=city["x"], y=city["y"])
+        self.tally(new, "captured")
+        self.tally(old, "cities_lost")
         self.fx("capture", x=city["x"], y=city["y"], civ=new)
         if was_cap:
             rest = self.civ_cities(old)
@@ -671,6 +684,10 @@ class Engine:
                 return
             betrayal = cur == "alliance"
             self.set_rel(cid, tid, "war")
+            self.tally(cid, "wars_declared")
+            self.tally(tid, "wars_received")
+            if betrayal:
+                self.tally(cid, "betrayals")
             self.ev("war", f"{civ['name']} به {tgt['name']} اعلان جنگ کرد!" + (" (خیانت به متحد)" if betrayal else "")
                     + (f" «{text}»" if text else ""), civs=[cid, tid])
             done.append(f"اعلان جنگ به {tgt['name']}")
@@ -678,6 +695,7 @@ class Engine:
                 if ally["alive"] and ally["id"] not in (cid, tid) and self.rel(ally["id"], tid) == "alliance" \
                         and self.rel(ally["id"], cid) != "war":
                     self.set_rel(ally["id"], cid, "war")
+                    self.tally(ally["id"], "wars_joined")
                     self.ev("war", f"{ally['name']} برای دفاع از متحدش {tgt['name']} وارد جنگ با {civ['name']} شد.",
                             civs=[ally["id"], cid])
         elif act in ("propose_peace", "propose_alliance"):
@@ -705,11 +723,15 @@ class Engine:
             tgt["peace_turn"][str(cid)] = self.s["turn"]
             if kind == "peace":
                 self.ev("peace", f"صلح میان {civ['name']} و {tgt['name']} برقرار شد.", civs=[cid, tid])
+                self.tally(cid, "peaces")
+                self.tally(tid, "peaces")
                 for u in self.units.values():   # stop running attacks
                     if u["civ"] in (cid, tid) and u["order"] and u["order"].get("type") == "attack":
                         u["order"] = None
             else:
                 self.ev("alliance", f"{civ['name']} و {tgt['name']} پیمان اتحاد بستند.", civs=[cid, tid])
+                self.tally(cid, "alliances")
+                self.tally(tid, "alliances")
             done.append(f"پذیرش {kind} با {tgt['name']}")
         elif act == "reject":
             civ["proposals"] = [p for p in civ["proposals"] if p["from"] != tid]
@@ -723,6 +745,7 @@ class Engine:
             if text:
                 tgt["inbox"].append(dict(turn=self.s["turn"], text=text, **{"from": cid}))
                 del tgt["inbox"][:-8]
+                self.tally(cid, "messages")
                 self.ev("message", f"پیام {civ['name']} به {tgt['name']}: «{text}»", civs=[cid, tid],
                         frm=cid, to=tid, msg=text)
                 done.append(f"پیام به {tgt['name']}")
@@ -732,6 +755,7 @@ class Engine:
                 civ["gold"] -= amt
                 tgt["gold"] += amt
                 self.ev("diplomacy", f"{civ['name']} {int(amt)} طلا به {tgt['name']} هدیه داد.", civs=[cid, tid])
+                self.tally(cid, "gold_gifted", int(amt))
                 done.append(f"هدیه {int(amt)} طلا")
         else:
             errs.append(f"اقدام دیپلماتیک ناشناخته: {act}")
@@ -878,6 +902,7 @@ class Engine:
                 self.check_elimination(civ["id"])
         for civ in self.civs:
             civ["score"] = self.score(civ["id"]) if civ["alive"] else civ.get("score", 0)
+            civ.setdefault("tally", {})["peak_score"] = max(civ["tally"].get("peak_score", 0), civ["score"])
         self.recompute_territory()
 
         s["turn"] += 1
@@ -946,6 +971,7 @@ class Engine:
         c["progress"] = 0.0
         c["blocked"] = None
         if item in UNITS:
+            self.tally(civ["id"], "units_built")
             if item == "settler":
                 c["pop"] -= 1
             self.spawn_unit(civ["id"], item, c["x"], c["y"])
@@ -955,6 +981,7 @@ class Engine:
             c["buildings"].append(item)
             c["hp"] = min(self.city_max_hp(c), c["hp"] + (15 if item in ("walls", "castle") else 0))
             self.ev("build", f"{civ['name']} در {c['name']} {d['name']} ساخت.", civ=civ["id"])
+            self.tally(civ["id"], "buildings")
             if item == "spaceport":
                 self.ev("victory", f"{civ['name']} پایگاه فضایی را تکمیل کرد و به ستارگان رسید!", civ=civ["id"])
                 if "science" in self.s["victories"]:
@@ -1303,6 +1330,8 @@ class Engine:
                 era=ERA_NAMES[era_of(c["techs"])] if c["techs"] else ERA_NAMES["ancient"],
                 relations=c["relations"], plan=c["plan"], income=c["income"], met=c["met"],
                 eliminated_turn=c["eliminated_turn"], ai=c["ai"], capital=c["capital"],
+                cats=c.get("cats", {}), focus=c.get("focus", {}), tally=c.get("tally", {}),
+                last_focus=(c.get("timeline") or [[None, None]])[-1][1],
             ))
         return dict(
             turn=s["turn"], year=s["year"], year_label=year_label(s["year"]), max_turns=s["max_turns"],

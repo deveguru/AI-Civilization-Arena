@@ -1,5 +1,7 @@
 import json
 import random
+import threading
+from collections import defaultdict, deque
 import secrets
 import time
 from functools import wraps
@@ -8,6 +10,7 @@ from flask import Flask, jsonify, redirect, render_template, request, session, a
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from . import ai, db
+from .analysis import CATEGORIES
 from .engine import Engine
 from .mapgen import SIZES
 from .rules import (CIV_COLORS, CIV_NAMES, FLAG_EMBLEMS, FLAG_PATTERNS, MODEL_LOCAL, PERSONALITIES,
@@ -48,6 +51,7 @@ def create_app(db_path):
             units={k: dict(name=v["name"], str=v["str"], rng=v["rng"], move=v["move"]) for k, v in UNITS.items()},
             buildings={k: v["name"] for k, v in BUILDINGS.items()},
             personalities={k: v["name"] for k, v in PERSONALITIES.items()},
+            categories=CATEGORIES,
         )
 
     # ---------------------------------------------------------------- pages
@@ -118,10 +122,10 @@ def create_app(db_path):
         else:
             events = db.q("SELECT id,turn,civ,kind,text,data FROM events WHERE game_id=? AND id>? ORDER BY id LIMIT 200", (gid, ev))
         if th == 0:
-            thoughts = db.q("SELECT id,turn,civ,model,thought,plan,reasoning,actions,errors,ok,fallback,latency_ms,tokens FROM thoughts "
+            thoughts = db.q("SELECT id,turn,civ,model,thought,plan,reasoning,actions,errors,ok,fallback,latency_ms,tokens,focus FROM thoughts "
                             "WHERE game_id=? ORDER BY id DESC LIMIT 40", (gid,))[::-1]
         else:
-            thoughts = db.q("SELECT id,turn,civ,model,thought,plan,reasoning,actions,errors,ok,fallback,latency_ms,tokens FROM thoughts "
+            thoughts = db.q("SELECT id,turn,civ,model,thought,plan,reasoning,actions,errors,ok,fallback,latency_ms,tokens,focus FROM thoughts "
                             "WHERE game_id=? AND id>? ORDER BY id LIMIT 60", (gid, th))
         for e in events:
             e["data"] = json.loads(e["data"] or "{}")
@@ -151,7 +155,8 @@ def create_app(db_path):
     def save_settings():
         d = request.get_json(force=True) or {}
         allowed = ("api_base", "rpm", "temperature", "max_tokens", "timeout", "json_mode", "language",
-                   "extra_prompt", "default_think_every", "default_turn_delay")
+                   "extra_prompt", "default_think_every", "default_turn_delay", "chat_public", "chat_rpm",
+                   "chat_max_tokens")
         for k in allowed:
             if k in d:
                 db.set_setting(k, str(d[k]).strip())
@@ -339,6 +344,146 @@ def create_app(db_path):
         resp = app.response_class(json.dumps(data, ensure_ascii=False, indent=1), mimetype="application/json")
         resp.headers["Content-Disposition"] = f"attachment; filename=civarena-game-{gid}.json"
         return resp
+
+    # ---------------------------------------------------------------- battle report (public)
+    @app.get("/report/<int:gid>")
+    def report_page(gid):
+        if not db.get_game(gid, with_state=False):
+            abort(404)
+        return render_template("report.html", gid=gid, rules=json.dumps(rules_payload(), ensure_ascii=False))
+
+    @app.get("/api/game/<int:gid>/battle")
+    def battle(gid):
+        h = MANAGER.get(gid) or abort(404)
+        g = db.get_game(gid, with_state=False)
+        snap = h.snapshot()
+        with h.lock:
+            civs = [dict(id=c["id"], timeline=c.get("timeline", [])) for c in h.engine.civs]
+        stats = db.q("SELECT turn,civ,score,pop,cities,military,techs FROM stats WHERE game_id=? ORDER BY turn", (gid,))
+        ai_stats = db.q("SELECT civ,COUNT(*) n,SUM(ok) ok,SUM(fallback) fb,AVG(NULLIF(latency_ms,0)) ms,SUM(tokens) tokens "
+                        "FROM thoughts WHERE game_id=? GROUP BY civ", (gid,))
+        quotes = {}
+        for c in civs:
+            rows = db.q("SELECT turn,focus,thought FROM thoughts WHERE game_id=? AND civ=? AND fallback=0 ORDER BY id",
+                        (gid, c["id"]))
+            pick = []
+            for f in ("attack", "alliance"):
+                r = next((r for r in rows if r["focus"] == f), None)
+                if r:
+                    pick.append(r)
+            if rows:
+                pick.append(rows[-1])
+            seen, out = set(), []
+            for r in pick:
+                if r["turn"] not in seen:
+                    seen.add(r["turn"])
+                    out.append(dict(turn=r["turn"], focus=r["focus"], text=(r["thought"] or "")[:420]))
+            quotes[c["id"]] = out
+        return jsonify(game=dict(id=gid, name=g["name"], status=h.status, created=g["created"]),
+                       static=h.static_view(), snapshot=snap, stats=stats, ai=ai_stats, civs=civs, quotes=quotes)
+
+    # ---------------------------------------------------------------- chat with leaders
+    chat_hits = defaultdict(deque)
+    chat_lock = threading.Lock()
+
+    def chat_allowed():
+        return is_admin() or db.get_setting("chat_public") == "1"
+
+    @app.get("/api/game/<int:gid>/chat/<int:cid>")
+    def chat_history(gid, cid):
+        MANAGER.get(gid) or abort(404)
+        return jsonify(allowed=chat_allowed(), admin=is_admin(), messages=db.get_chats(gid, cid))
+
+    @app.post("/api/game/<int:gid>/chat/<int:cid>")
+    def chat_send(gid, cid):
+        if request.headers.get("X-Requested-With") != "civarena":
+            return jsonify(error="درخواست نامعتبر"), 400
+        if not chat_allowed():
+            return jsonify(error="گفتگو فقط برای مدیر فعال است (ورود به پیشخوان یا فعال‌کردن گفتگوی عمومی در تنظیمات)."), 403
+        h = MANAGER.get(gid) or abort(404)
+        msg = ((request.get_json(force=True) or {}).get("message") or "").strip()[:1000]
+        if not msg:
+            return jsonify(error="پیام خالی است"), 400
+        ip = request.headers.get("X-Forwarded-For", request.remote_addr or "").split(",")[0].strip()
+        if not is_admin():
+            rpm = int(float(db.get_setting("chat_rpm") or 6))
+            now = time.time()
+            with chat_lock:
+                dq = chat_hits[ip]
+                while dq and now - dq[0] > 60:
+                    dq.popleft()
+                if len(dq) >= rpm:
+                    return jsonify(error="تعداد پیام‌ها زیاد است؛ یک دقیقه صبر کنید."), 429
+                dq.append(now)
+        with h.lock:
+            if not (0 <= cid < len(h.engine.civs)):
+                abort(404)
+            civ = dict(h.engine.civs[cid])
+            view = h.engine.civ_view(cid) if civ["alive"] else None
+            turn = h.engine.s["turn"]
+        if view is None:
+            return jsonify(error="این تمدن نابود شده و رهبرش دیگر پاسخ نمی‌دهد."), 400
+        thoughts = db.q("SELECT turn,focus,thought FROM thoughts WHERE game_id=? AND civ=? ORDER BY id DESC LIMIT 6",
+                        (gid, cid))[::-1]
+        history = db.get_chats(gid, cid, 24)
+        db.add_chat(gid, cid, "user", msg, turn=turn, ip=ip)
+        if civ["model"] == MODEL_LOCAL:
+            reply, ms, reasoning = ai.local_chat_reply(civ, view, thoughts, msg), 0, ""
+        else:
+            try:
+                r = ai.leader_reply(civ["model"], ai.chat_system_prompt(civ, view, thoughts), history, msg,
+                                    int(float(db.get_setting("chat_max_tokens") or 1200)))
+            except Exception as e:  # noqa
+                return jsonify(error=f"خطا در پاسخ مدل: {e}"), 502
+            reply, ms, reasoning = r["text"], r["ms"], r["reasoning"]
+        db.add_chat(gid, cid, "leader", reply, model=civ["model"], turn=turn, ms=ms)
+        return jsonify(reply=reply, reasoning=reasoning[:6000], model=civ["model"], ms=ms, turn=turn)
+
+    # ---------------------------------------------------------------- cross-game model analytics
+    @app.get("/api/admin/analytics/models")
+    @admin_required
+    def model_analytics():
+        agg = {}
+
+        def m(name):
+            return agg.setdefault(name, dict(model=name, decisions=0, cats={}, focus={}, games=0, wins=0,
+                                             ranks=[], scores=[], eliminated=0, civs=0, fallbacks=0))
+        for r in db.q("SELECT model,focus,cats,fallback FROM thoughts"):
+            a = m(r["model"])
+            a["decisions"] += 1
+            a["fallbacks"] += r["fallback"] or 0
+            if r["focus"]:
+                a["focus"][r["focus"]] = a["focus"].get(r["focus"], 0) + 1
+            for k, v in json.loads(r["cats"] or "{}").items():
+                a["cats"][k] = a["cats"].get(k, 0) + v
+        games = []
+        for g in db.list_games():
+            st = json.loads(db.get_game(g["id"])["state"])
+            ranked = sorted(st["civs"], key=lambda c: (-int(c["alive"]), -c.get("score", 0)))
+            seen = set()
+            for rank, c in enumerate(ranked, 1):
+                a = m(c["model"])
+                a["civs"] += 1
+                a["ranks"].append(rank)
+                a["scores"].append(c.get("score", 0))
+                if not c["alive"]:
+                    a["eliminated"] += 1
+                if c["model"] not in seen:
+                    a["games"] += 1
+                    seen.add(c["model"])
+                if st.get("winner") == c["id"]:
+                    a["wins"] += 1
+            games.append(dict(id=g["id"], name=g["name"], status=g["status"], turn=g["turn"],
+                              winner=st["civs"][st["winner"]]["model"] if st.get("winner") is not None else None))
+        out = []
+        for a in agg.values():
+            a["avg_rank"] = round(sum(a["ranks"]) / len(a["ranks"]), 2) if a["ranks"] else None
+            a["avg_score"] = round(sum(a["scores"]) / len(a["scores"])) if a["scores"] else None
+            a.pop("ranks")
+            a.pop("scores")
+            out.append(a)
+        out.sort(key=lambda a: (-a["wins"], a["avg_rank"] or 99))
+        return jsonify(models=out, games=games)
 
     MANAGER.resume_running()
     return app

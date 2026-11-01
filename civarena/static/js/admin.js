@@ -8,11 +8,16 @@
   const STATUS = { running: 'در حال اجرا', paused: 'متوقف', finished: 'پایان یافته' };
   const VICT = { domination: 'فتح جهان', science: 'علمی', score: 'امتیاز' };
   const LOCAL = 'local-bot';
+  const LEMURA_CARD = `<div class="lemura"><div class="lg">L</div><div style="flex:1;line-height:1.9">
+      <b>وب‌سرویس پیشنهادی: لمورا (Lemura)</b> — وب‌سرویس هوش مصنوعی <b>ایرانی، آسان و سازگار با OpenAI</b>.
+      با یک کلید <code>lsk-…</code> به مدل‌های GPT، Claude، Gemini و دیگر مدل‌ها دسترسی دارید؛ قیمت‌گذاری تومانی.
+      <div class="row" style="margin-top:6px;flex-wrap:wrap"><a class="btn gold" href="https://lemura.ir" target="_blank">ورود به lemura.ir و دریافت کلید</a><a class="btn" href="https://lemura.ir/docs" target="_blank">مستندات API</a></div></div></div>`;
+
 
   function go(p, arg) {
     A.page = p; clearInterval(A.refresh);
     document.querySelectorAll('.nav a[data-p]').forEach(a => a.classList.toggle('on', a.dataset.p === p));
-    ({ games: pGames, new: pNew, results: pResults, settings: pSettings })[p](arg);
+    ({ games: pGames, new: pNew, results: pResults, analytics: pAnalytics, settings: pSettings })[p](arg);
   }
   function flash(el, msg, kind = 'ok') { el.innerHTML = `<div class="note ${kind}">${msg}</div>`; }
 
@@ -64,7 +69,7 @@
     const st = A.settings;
     const noKey = !st.api_key_set;
     page.innerHTML = `<h1>ساخت بازی جدید</h1><div class="sub">تمدن‌ها، مدل هوش مصنوعی هر کدام، شخصیت، رنگ و پرچم را انتخاب کنید — یا همه چیز را تصادفی بسازید.</div>
-      ${noKey ? `<div class="note err" style="margin-bottom:14px">کلید API هنوز تنظیم نشده؛ فقط «هوش محلی» کار می‌کند. <a data-go="settings">تنظیم وب‌سرویس</a></div>` : ''}
+      ${noKey ? `<div class="note err" style="margin-bottom:14px">کلید API هنوز تنظیم نشده؛ فقط «هوش محلی» کار می‌کند. <a data-go="settings">تنظیم وب‌سرویس</a></div>${LEMURA_CARD}` : ''}
       ${!A.models.length && !noKey ? `<div class="note" style="margin-bottom:14px">فهرست مدل‌ها هنوز دریافت نشده. <a data-go="settings">دریافت از وب‌سرویس</a></div>` : ''}
       <div class="card"><h2>${ic('users')} تمدن‌ها</h2>
         <div class="row" style="flex-wrap:wrap;margin-bottom:14px">
@@ -177,7 +182,7 @@
     await loadSettings();
     page.innerHTML = `<div class="row" style="flex-wrap:wrap"><div><h1>نتایج و تحلیل</h1><div class="sub">رتبه‌بندی، نمودار پیشرفت، عملکرد هر مدل و گزارش کامل افکار هوش مصنوعی.</div></div>
       <div style="margin-inline-start:auto" class="row"><select class="inp" id="rg" style="width:260px">${games.map(g => `<option value="${g.id}" ${g.id === gid ? 'selected' : ''}>#${g.id} — ${esc(g.name)}</option>`).join('')}</select>
-      <a class="btn" href="/api/admin/game/${gid}/export">${ic('download')} خروجی JSON</a><a class="btn" href="/?g=${gid}" target="_blank">${ic('eye')} نقشه</a></div></div>
+      <a class="btn gold" href="/report/${gid}" target="_blank">${ic('pie')} گزارش نبرد</a><a class="btn" href="/api/admin/game/${gid}/export">${ic('download')} خروجی JSON</a><a class="btn" href="/?g=${gid}" target="_blank">${ic('eye')} نقشه</a></div></div>
       <div id="rbody">در حال بارگذاری…</div>`;
     document.getElementById('rg').onchange = e => pResults(+e.target.value);
     const draw = async () => {
@@ -194,6 +199,7 @@
     const cfg = rep.game.config;
     return `<div class="kpi" id="kpi"></div>
       <div class="card"><h2>${ic('crown')} رتبه‌بندی تمدن‌ها و عملکرد مدل‌ها</h2><div style="overflow:auto"><table class="t" id="rank"></table></div></div>
+      <div class="card"><h2>${ic('pie')} الگوی تصمیم‌گیری تمدن‌ها</h2><div id="decisions"></div>${catLegend()}</div>
       <div class="card"><div class="row" style="margin-bottom:10px"><h2 style="margin:0">${ic('chart')} نمودار پیشرفت</h2>
         <select class="inp" id="metric" style="width:160px;margin-inline-start:auto"><option value="score">امتیاز</option><option value="pop">جمعیت</option><option value="cities">شهرها</option><option value="military">قدرت نظامی</option><option value="techs">فناوری</option><option value="gold">طلا</option></select></div>
         <canvas class="chart" id="chart"></canvas><div id="legend" class="row" style="flex-wrap:wrap;margin-top:8px"></div></div>
@@ -238,6 +244,8 @@
     document.querySelectorAll('[data-cm]').forEach(sel => sel.onchange = async () => { await api(`/api/admin/game/${gid}/model`, { method: 'POST', body: { civ: +sel.dataset.cm, model: sel.value } }); });
     drawChart(rep);
     document.getElementById('metric').onchange = () => drawChart(rep);
+    const dec = document.getElementById('decisions');
+    if (dec) dec.innerHTML = heatMatrix([...s.civs].sort((a, b) => b.score - a.score).map(d => ({ label: `${flagHTML(civ(d.id).flag, 22, 15)} ${esc(civ(d.id).name)} <span class="model">${esc(civ(d.id).model)}</span>`, cats: d.cats })));
     document.querySelectorAll('[data-ga]').forEach(b => b.onclick = async () => { try { await api(`/api/admin/game/${gid}/${b.dataset.ga}`, { method: 'POST', body: {} }); flash(document.getElementById('smsg'), 'انجام شد'); } catch (e) { flash(document.getElementById('smsg'), esc(e.message), 'err'); } });
     document.getElementById('sapply').onclick = async () => { await api(`/api/admin/game/${gid}/speed`, { method: 'POST', body: { turn_delay: +document.getElementById('sdelay').value, think_every: +document.getElementById('sthink').value } }); flash(document.getElementById('smsg'), 'ذخیره شد'); };
     if (!document.getElementById('tlog').dataset.init) {
@@ -266,7 +274,7 @@
   function thoughtFull(t, st) {
     const c = st.civs[t.civ];
     return `<div class="th ${t.fallback ? 'fb' : ''}" style="--c:${c.color}">
-      <div class="hd">${flagHTML(c.flag, 24, 16)}<b>${esc(c.name)}</b><span class="model">${esc(t.model)}</span>${t.fallback ? '<span class="chip err">جایگزین محلی</span>' : ''}
+      <div class="hd">${flagHTML(c.flag, 24, 16)}<b>${esc(c.name)}</b><span class="model">${esc(t.model)}</span>${t.focus && R.categories[t.focus] ? `<span class="fchip" style="--fc:${R.categories[t.focus].color}">${R.categories[t.focus].name}</span>` : ''}${t.fallback ? '<span class="chip err">جایگزین محلی</span>' : ''}
         <span class="t">نوبت ${fa(t.turn)}${t.latency_ms ? ' · ' + fa((t.latency_ms / 1000).toFixed(1)) + 'ث' : ''}${t.tokens ? ' · ' + fa(t.tokens) + ' توکن' : ''}</span></div>
       <div class="txt">${esc(t.thought)}</div>${t.plan ? `<div class="pl">${ic('crown', 'sm')} ${esc(t.plan)}</div>` : ''}
       <div class="acts">${(t.actions || []).map(a => `<span class="chip">${esc(a)}</span>`).join('')}</div>
@@ -297,11 +305,33 @@
     document.getElementById('legend').innerHTML = st.civs.map(c => `<span class="chip"><i class="dot" style="background:${c.color}"></i> ${esc(c.name)} <span class="model">${esc(c.model)}</span></span>`).join('');
   }
 
+
+  /* ================================================================ cross-game model analytics */
+  async function pAnalytics() {
+    page.innerHTML = `<h1>تحلیل مدل‌ها در همه نبردها</h1><div class="sub">هر مدل هوش مصنوعی در نبردهای مختلف بیشتر چه راهبردی انتخاب می‌کند — رشد، توسعه، علم، اقتصاد، دفاع، حمله، اتحاد یا بی‌طرفی — و چقدر موفق است.</div><div id="ab">در حال محاسبه…</div>`;
+    const r = await api('/api/admin/analytics/models');
+    const ab = document.getElementById('ab'); if (!ab) return;
+    if (!r.models.length) { ab.innerHTML = '<div class="card">هنوز داده‌ای نیست؛ یک بازی بسازید.</div>'; return; }
+    const tot = r.models.reduce((a, m) => a + m.decisions, 0);
+    ab.innerHTML = `<div class="kpi"><div><b>${fa(r.games.length)}</b><span>نبرد</span></div><div><b>${fa(r.models.length)}</b><span>مدل</span></div><div><b>${fa(tot)}</b><span>تصمیم تحلیل‌شده</span></div><div><b>${fa(r.games.filter(g => g.winner).length)}</b><span>نبرد تمام‌شده</span></div></div>
+      <div class="card"><h2>${ic('crown')} جدول مدل‌ها</h2><div style="overflow:auto"><table class="t"><tr><th>مدل</th><th>نبرد</th><th>پیروزی</th><th>نرخ پیروزی</th><th>میانگین رتبه</th><th>میانگین امتیاز</th><th>نابودی</th><th>تصمیم</th><th>خطا</th><th>راهبرد غالب</th><th style="min-width:220px">الگوی تصمیم</th></tr>
+      ${r.models.map(m => { const top = catShares(m.cats).sort((a, b) => b.v - a.v)[0];
+        return `<tr><td><span class="model">${esc(m.model)}</span></td><td>${fa(m.games)}</td><td><b style="color:#f2c14e">${fa(m.wins)}</b></td><td>${m.games ? pct(m.wins / m.games) : '—'}</td><td>${m.avg_rank != null ? fa(m.avg_rank) : '—'}</td><td>${fa(m.avg_score)}</td><td>${fa(m.eliminated)}</td><td>${fa(m.decisions)}</td><td>${fa(m.fallbacks)}</td>
+        <td>${top ? `<span class="fchip" style="--fc:${top.color}">${top.name} ${pct(top.v)}</span>` : '—'}</td><td>${stackBar(m.cats, 12)}</td></tr>`; }).join('')}</table></div>${catLegend()}</div>
+      <div class="card"><h2>${ic('pie')} ماتریس راهبرد مدل‌ها</h2><div style="overflow:auto">${heatMatrix(r.models.map(m => ({ label: `<span class="model">${esc(m.model)}</span>`, cats: m.cats })))}</div></div>
+      <div class="grid2">${r.models.map(m => `<div class="card"><h2><span class="model">${esc(m.model)}</span> <span class="dim" style="font-weight:400;font-size:12px">${fa(m.decisions)} تصمیم · ${fa(m.wins)} پیروزی از ${fa(m.games)} نبرد</span></h2>
+        <div class="row" style="align-items:center">${donut(m.cats, 150)}<div style="flex:1">${barList(m.cats)}</div></div>
+        <div class="dim" style="margin-top:8px;font-size:12px">تمرکز اعلام‌شده توسط خود مدل</div>${barList(m.focus, { count: true })}</div>`).join('')}</div>
+      <div class="card"><h2>${ic('scroll')} نبردها</h2><table class="t"><tr><th>#</th><th>نام</th><th>وضعیت</th><th>نوبت</th><th>مدل برنده</th><th></th></tr>
+        ${r.games.map(g => `<tr><td>${fa(g.id)}</td><td>${esc(g.name)}</td><td><span class="pill ${g.status}">${STATUS[g.status] || g.status}</span></td><td>${fa(g.turn)}</td><td>${g.winner ? `<span class="model">${esc(g.winner)}</span>` : '—'}</td><td><a class="btn" href="/report/${g.id}" target="_blank">گزارش</a></td></tr>`).join('')}</table></div>`;
+  }
+
   /* ================================================================ settings */
   async function pSettings() {
     await loadSettings();
     const s = A.settings;
     page.innerHTML = `<h1>وب‌سرویس هوش مصنوعی</h1><div class="sub">همه تمدن‌ها از یک وب‌سرویس (سازگار با OpenAI) استفاده می‌کنند و فقط مدلشان متفاوت است. تنظیمات در پایگاه داده ذخیره می‌شود.</div>
+      ${LEMURA_CARD}
       <div class="card"><h2>${ic('key')} اتصال</h2>
         <div class="grid2">
           <div class="field"><label class="f">آدرس پایه API</label><input class="inp" id="base" value="${esc(s.api_base)}" style="direction:ltr"></div>
@@ -327,6 +357,11 @@
           <div class="field"><label class="f">پیش‌فرض: تفکر هر چند نوبت</label><input class="inp" id="dthink" type="number" value="${esc(s.default_think_every)}" min="1" max="20"></div>
           <div class="field"><label class="f">پیش‌فرض: فاصله نوبت (ثانیه)</label><input class="inp" id="ddelay" type="number" step="0.5" value="${esc(s.default_turn_delay)}"></div>
         </div>
+        <div class="grid3" style="margin-bottom:6px">
+          <div class="field"><label class="f">گفتگوی تماشاگران با رهبران</label><label class="switch"><input type="checkbox" id="chpub" ${s.chat_public === '1' ? 'checked' : ''}> برای همه بازدیدکنندگان فعال باشد (در غیر این صورت فقط مدیر)</label></div>
+          <div class="field"><label class="f">حداکثر پیام گفتگو در دقیقه برای هر بازدیدکننده</label><input class="inp" id="chrpm" type="number" value="${esc(s.chat_rpm)}" min="1" max="60"></div>
+          <div class="field"><label class="f">حداکثر توکن پاسخ گفتگو</label><input class="inp" id="chtok" type="number" value="${esc(s.chat_max_tokens)}" min="200" max="8000"></div>
+        </div>
         <div class="field"><label class="f">دستور اضافه برای همه رهبران (اختیاری)</label><textarea class="inp" id="extra" rows="3" placeholder="مثلاً: پیام‌های دیپلماتیک را با لحن ادبی و حماسی بنویس.">${esc(s.extra_prompt)}</textarea></div>
         <button class="btn gold" id="save2">ذخیره</button> <span id="smsg2"></span></div>
       <div class="card"><h2>${ic('layers')} مدل‌های دریافت‌شده (${fa(A.models.length)})</h2>
@@ -336,7 +371,7 @@
         <button class="btn" id="spw">تغییر رمز</button> <span id="pmsg"></span></div>`;
     const val = id => document.getElementById(id).value;
     const save = async (msgEl) => {
-      const body = { api_base: val('base'), rpm: val('rpm'), temperature: val('temp'), max_tokens: val('mtok'), timeout: val('tout'), language: val('lang'), json_mode: document.getElementById('jm').checked ? '1' : '0', extra_prompt: val('extra'), default_think_every: val('dthink'), default_turn_delay: val('ddelay') };
+      const body = { api_base: val('base'), rpm: val('rpm'), temperature: val('temp'), max_tokens: val('mtok'), timeout: val('tout'), language: val('lang'), json_mode: document.getElementById('jm').checked ? '1' : '0', extra_prompt: val('extra'), default_think_every: val('dthink'), default_turn_delay: val('ddelay'), chat_public: document.getElementById('chpub').checked ? '1' : '0', chat_rpm: val('chrpm'), chat_max_tokens: val('chtok') };
       if (val('key')) body.api_key = val('key');
       try { await api('/api/admin/settings', { method: 'POST', body }); flash(msgEl, 'تنظیمات در پایگاه داده ذخیره شد.'); if (body.api_key) setTimeout(pSettings, 800); } catch (e) { flash(msgEl, esc(e.message), 'err'); }
     };

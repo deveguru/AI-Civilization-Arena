@@ -8,30 +8,32 @@
 [![Flask](https://img.shields.io/badge/Flask-3.x-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
 [![SQLite](https://img.shields.io/badge/SQLite-built--in-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
 [![Docker](https://img.shields.io/badge/Docker-ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)](#-docker)
-[![License: MIT](https://img.shields.io/badge/License-MIT-f2c14e?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/badge/License-Personal%20use%20only-e53935?style=for-the-badge)](LICENSE)
 
+[![Lemura](https://img.shields.io/badge/%D9%88%D8%A8%E2%80%8C%D8%B3%D8%B1%D9%88%DB%8C%D8%B3%20%D9%BE%DB%8C%D8%B4%D9%86%D9%87%D8%A7%D8%AF%DB%8C-lemura.ir-8e24aa?style=flat-square)](https://lemura.ir)
 [![OpenAI compatible](https://img.shields.io/badge/LLM%20API-OpenAI%20compatible-10a37f?style=flat-square)](#-ai-providers--ارائهدهندههای-هوش-مصنوعی)
-[![Lemura](https://img.shields.io/badge/default-lemura.ir-8e24aa?style=flat-square)](https://lemura.ir/docs)
+[![2D / 3D](https://img.shields.io/badge/view-top--down%20%2B%203D-f2c14e?style=flat-square)](#-screenshots--تصاویر)
 [![No build step](https://img.shields.io/badge/frontend-vanilla%20JS%20%2B%20Canvas-orange?style=flat-square)](#%EF%B8%8F-architecture--معماری)
 [![RTL](https://img.shields.io/badge/UI-Persian%20RTL-e53935?style=flat-square)](#)
-[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](#-contributing--مشارکت)
 
-### Let different LLMs rule rival civilizations — and read their minds while they do it.
-### مدل‌های هوش مصنوعی مختلف را رهبر تمدن‌های رقیب کنید — و فکرشان را لحظه‌به‌لحظه بخوانید.
+### Let different LLMs rule rival civilizations — read their minds, talk to their leaders, and analyze how each model plays.
+### مدل‌های هوش مصنوعی مختلف را رهبر تمدن‌های رقیب کنید — فکرشان را بخوانید، با رهبرانشان گفتگو کنید و سبک تصمیم‌گیری هر مدل را تحلیل کنید.
 
 [**Quick start**](#-quick-start--شروع-سریع) ·
+[**Lemura**](#-recommended-ai-service--وبسرویس-پیشنهادی-لمورا) ·
 [**Features**](#-features--امکانات) ·
 [**Screenshots**](#-screenshots--تصاویر) ·
+[**Decision analysis**](#-decision-analysis--تحلیل-تصمیمگیری) ·
 [**How the AI plays**](#-how-the-ai-plays--هوش-مصنوعی-چطور-بازی-میکند) ·
-[**Game rules**](#-game-rules--قوانین-بازی) ·
+[**Rules**](#-game-rules--قوانین-بازی) ·
 [**Deploy**](#-deploy-on-a-server--راهاندازی-روی-سرور) ·
 [**FAQ**](#-faq--پرسشهای-رایج)
 
 <br>
 
-<img src="docs/images/demo.gif" alt="Live demo: armies move, cities fall, AI thoughts stream in" width="100%">
+<img src="docs/images/demo.gif" alt="Live 3D view: armies move, cities fall, AI thoughts stream in" width="100%">
 
-<sub>Live spectator view — armies march, cities are conquered, each leader's reasoning streams into the “AI mind” panel.</sub>
+<sub>Live spectator view in 3D mode — cities are conquered while each leader's reasoning streams into the “AI mind” panel.</sub>
 
 </div>
 
@@ -39,23 +41,47 @@
 
 ## 🌍 What is this? &nbsp;·&nbsp; این پروژه چیست؟
 
-**AI Civilization Arena** is a full-stack, open-source, turn-based **strategy game played entirely by AI models**.
-You pick a few LLMs (GPT, Claude, Gemini, DeepSeek, Llama… anything behind one OpenAI-compatible API), give each one a civilization in a corner of a procedurally generated 2D map, and press play.
-Every turn each model receives its situation as JSON and answers with its *reasoning*, a long-term plan, a private memory note, research choice, city production, unit orders and diplomacy.
-The engine resolves everything — growth, research, battles, sieges, conquests, alliances — and you watch it unfold on a top-down animated map while reading **every thought** of every leader.
-
-It is a fun **benchmark of strategic reasoning**, a great demo for LLM agents, and simply addictive to watch.
+**AI Civilization Arena** is a full-stack, turn-based **strategy game played entirely by AI models**.
+Pick a few LLMs (GPT, Claude, Gemini… anything behind one OpenAI-compatible API), give each one a civilization in a corner of a procedurally generated map, and press play.
+Every turn each model receives its situation as JSON and answers with its *reasoning*, its **main strategic focus**, a long-term plan, a private memory note, research, city production, unit orders and diplomacy.
+The engine resolves everything — growth, research, battles, sieges, conquests, alliances — and you watch it on an animated map in **top-down or 3D view**, read **every thought**, **chat with any leader**, and get a **full battle report** showing what each model really prefers: growth, expansion, alliances, attacks or neutrality.
 
 <div dir="rtl" align="right">
 
-**نبرد تمدن‌های هوش مصنوعی** یک بازی استراتژی نوبتی، متن‌باز و کامل (فرانت‌اند + بک‌اند) است که **تماماً توسط مدل‌های هوش مصنوعی** بازی می‌شود.
-چند مدل زبانی (GPT، Claude، Gemini، DeepSeek، Llama و…) را از طریق **یک وب‌سرویس سازگار با OpenAI** انتخاب می‌کنید؛ هر مدل رهبر یک تمدن در گوشه‌ای از یک نقشه دوبعدی تصادفی می‌شود و دکمه شروع را می‌زنید.
-در هر نوبت، هر مدل وضعیت خودش را به صورت JSON دریافت می‌کند و با **استدلال**، برنامه بلندمدت، یادداشت حافظه، انتخاب پژوهش، تولید شهرها، فرمان به واحدها و اقدامات دیپلماتیک پاسخ می‌دهد.
-موتور بازی همه چیز را اجرا می‌کند — رشد جمعیت، علم، نبرد، محاصره، فتح شهرها، صلح و اتحاد — و شما همه را روی نقشه‌ای متحرک و زیبا تماشا می‌کنید و **فکر تک‌تک رهبران** را می‌خوانید.
-
-یک **محک جذاب برای سنجش تفکر راهبردی مدل‌ها**، یک نمایش عالی از عامل‌های هوش مصنوعی و البته بسیار سرگرم‌کننده برای تماشا!
+**نبرد تمدن‌های هوش مصنوعی** یک بازی استراتژی نوبتی کامل (فرانت‌اند + بک‌اند) است که **تماماً توسط مدل‌های هوش مصنوعی** بازی می‌شود.
+چند مدل زبانی را از طریق **یک وب‌سرویس سازگار با OpenAI** انتخاب می‌کنید؛ هر مدل رهبر یک تمدن در گوشه‌ای از نقشه می‌شود.
+در هر نوبت، هر مدل وضعیتش را دریافت می‌کند و با **استدلال**، **تمرکز راهبردی اصلی** (رشد، توسعه، علم، اقتصاد، دفاع، حمله، اتحاد یا بی‌طرفی)، برنامه، حافظه، پژوهش، تولید شهرها، فرمان نظامی و دیپلماسی پاسخ می‌دهد.
+شما همه چیز را روی نقشه متحرک در **نمای از بالا یا سه‌بعدی** تماشا می‌کنید، **فکر تک‌تک رهبران** را می‌خوانید، **با هر رهبر جداگانه گفتگو می‌کنید** و در پایان یک **گزارش کامل نبرد** با نمودار تصمیم‌گیری هر تمدن و مدل دریافت می‌کنید.
 
 </div>
+
+---
+
+## 💜 Recommended AI service &nbsp;·&nbsp; وب‌سرویس پیشنهادی: لمورا
+
+<table>
+<tr>
+<td width="90" align="center"><a href="https://lemura.ir"><img src="https://img.shields.io/badge/L-Lemura-8e24aa?style=for-the-badge" alt="Lemura"></a></td>
+<td>
+
+<div dir="rtl" align="right">
+
+### [لمورا — lemura.ir](https://lemura.ir)
+**وب‌سرویس هوش مصنوعی ایرانی، آسان و سازگار با OpenAI** — پیشنهاد ما برای اجرای این بازی.
+
+- با **یک کلید `lsk-…`** به مدل‌های مختلف (GPT، Claude، Gemini و…) دسترسی دارید؛ دقیقاً همان چیزی که این بازی برای رقابت مدل‌ها لازم دارد.
+- کاملاً **سازگار با API اوپن‌ای‌آی** — بدون هیچ تغییری در کد کار می‌کند و آدرس آن به‌صورت پیش‌فرض در برنامه تنظیم شده است.
+- قیمت‌گذاری تومانی، مستندات فارسی و راه‌اندازی در چند دقیقه.
+
+🔗 سایت: **[lemura.ir](https://lemura.ir)** &nbsp;·&nbsp; 📘 مستندات: **[lemura.ir/docs](https://lemura.ir/docs)**
+
+</div>
+
+**English:** [Lemura](https://lemura.ir) is an easy, OpenAI-compatible Iranian AI web service and the recommended provider for this game — one `lsk-…` key gives access to many models (GPT, Claude, Gemini…), and its base URL is preconfigured: `https://lemura.ir/wp-json/lemuraai/v1` ([docs](https://lemura.ir/docs)).
+
+</td>
+</tr>
+</table>
 
 ---
 
@@ -65,95 +91,95 @@ It is a fun **benchmark of strategic reasoning**, a great demo for LLM agents, a
 <tr>
 <td width="50%" valign="top">
 
-### 🗺️ Beautiful top-down 2D map
-Procedural continents with relief shading, coastlines with foam, forests, hills, snowy mountains, deserts, animated water and drifting cloud shadows. Resources (wheat, fish, gold, iron, horses, gems, timber). Each civ starts in its own corner.
+### 🗺️ Top-down **and** 3D view
+A classic top-down map plus a **perspective 3D mode** with sky, horizon fog, standing mountains, forests, houses and units — all on plain Canvas 2D (no WebGL), so it runs smoothly on any computer. Deep zoom (×0.2 – ×6), adjustable camera pitch, smooth transitions.
 
 <div dir="rtl" align="right">
 
-**نقشه دوبعدی زیبا از نمای بالا** — قاره‌های تصادفی با سایه‌روشن ارتفاع، ساحل کف‌دار، جنگل، تپه، کوه‌های برفی، بیابان، آب متحرک و سایه ابرها؛ منابع طبیعی متنوع؛ هر تمدن در یک گوشه نقشه شروع می‌کند.
+**نمای از بالا و سه‌بعدی** — نقشه کلاسیک از بالا به‌همراه **حالت سه‌بعدی پرسپکتیو** با آسمان، مه افق، کوه‌ها، جنگل‌ها، خانه‌ها و واحدهای ایستاده؛ بدون WebGL و روی هر سیستمی روان. زوم عمیق، تنظیم زاویه دوربین و انتقال نرم بین حالت‌ها.
 
 </div>
 </td>
 <td width="50%" valign="top">
 
-### 🧠 Read every AI thought
-A live **“AI mind”** feed with a typewriter effect: reasoning, long-term plan, executed actions, rejected orders, and the model's hidden reasoning (`<think>` / `reasoning_content`) when available.
+### 💬 Chat with every leader
+Click any civilization and talk to its leader — the **same model** that rules it answers in character, knowing the live game state, its recent thoughts, plan and memory. Ask why it attacked, what it plans next, or what it thinks of its rivals.
 
 <div dir="rtl" align="right">
 
-**خواندن فکر هوش مصنوعی** — پنل زنده «ذهن هوش مصنوعی» با جلوه تایپ: استدلال، برنامه، کارهای انجام‌شده، فرمان‌های رد‌شده و حتی استدلال درونی مدل (در صورت وجود).
+**گفتگو با هر رهبر** — روی هر تمدن کلیک کنید و با رهبرش گفتگو کنید؛ **همان مدلی** که تمدن را اداره می‌کند با آگاهی از وضعیت لحظه‌ای، افکار اخیر، برنامه و حافظه‌اش پاسخ می‌دهد. بپرسید چرا حمله کرد یا نقشه بعدی‌اش چیست.
 
 </div>
 </td>
 </tr>
 <tr>
+<td valign="top">
+
+### 📊 Decision analysis & battle report
+Every decision is classified into **8 main strategies** (growth, expansion, science, economy, defense, attack, alliance, neutrality). At the end of a battle you get a full report — win or lose — with donut charts, focus timelines, a civ × strategy heat-map, key quotes from each model's mind and stats like cities captured, wars declared and betrayals.
+
+<div dir="rtl" align="right">
+
+**تحلیل تصمیم و گزارش نبرد** — هر تصمیم در **۸ راهبرد اصلی** دسته‌بندی می‌شود. در پایان نبرد (برد یا باخت) گزارش کامل با نمودار دایره‌ای، روند زمانی تمرکز، ماتریس تمدن×راهبرد، نقل‌قول‌های کلیدی از ذهن مدل و آمار فتح، جنگ، اتحاد و خیانت دریافت می‌کنید.
+
+</div>
+</td>
+<td valign="top">
+
+### 🧪 Model analytics across battles
+Compare models over **all games**: win rate, average rank and score, eliminations, errors, and each model's strategic fingerprint — does it prefer to grow, expand, ally or attack?
+
+<div dir="rtl" align="right">
+
+**تحلیل مدل‌ها در همه نبردها** — مقایسه مدل‌ها در تمام بازی‌ها: نرخ پیروزی، میانگین رتبه و امتیاز، نابودی‌ها، خطاها و «اثر انگشت راهبردی» هر مدل — بیشتر رشد می‌کند، توسعه می‌دهد، متحد می‌شود یا حمله می‌کند؟
+
+</div>
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+### 🧠 Read every AI thought
+Live “AI mind” feed with typewriter effect: reasoning, declared focus, plan, executed actions, rejected orders and hidden model reasoning (`<think>` / `reasoning_content`).
+
+<div dir="rtl" align="right">
+
+**خواندن فکر هوش مصنوعی** — پنل زنده با جلوه تایپ: استدلال، تمرکز اعلام‌شده، برنامه، کارهای انجام‌شده، فرمان‌های رد‌شده و استدلال درونی مدل.
+
+</div>
+</td>
 <td valign="top">
 
 ### ⚔️ War, conquest & diplomacy
-Declare war, siege with catapults and cannons, capture cities, eliminate rivals. Propose peace or alliances (allies join defensive wars), send free-text diplomatic messages, gift gold, betray allies…
+Declare war, siege with catapults and cannons, capture cities, eliminate rivals; peace, alliances (allies join defensive wars), free-text diplomatic messages, gold gifts… and betrayals.
 
 <div dir="rtl" align="right">
 
-**جنگ، فتح و دیپلماسی** — اعلان جنگ، محاصره با منجنیق و توپ، تصرف شهرها و نابودی رقبا؛ پیشنهاد صلح و اتحاد (متحدان به کمک هم می‌آیند)، پیام‌های دیپلماتیک آزاد، هدیه طلا و حتی خیانت!
+**جنگ، فتح و دیپلماسی** — اعلان جنگ، محاصره، تصرف شهر و نابودی رقبا؛ صلح، اتحاد (متحدان به کمک هم می‌آیند)، پیام دیپلماتیک آزاد، هدیه طلا… و خیانت!
 
 </div>
 </td>
+</tr>
+<tr>
 <td valign="top">
 
 ### 🏛️ Deep civilization sim
-Cities grow with food, culture expands borders, 24 technologies across 6 eras, 15 unit types (warrior → tank), 15 buildings, economy & upkeep, veterancy, terrain defense, fortification, city bombardment.
+Food-driven growth, culture-driven borders, 24 techs across 6 eras, 15 unit types (warrior → tank), 15 buildings, economy & upkeep, veterancy, terrain defense, fortification and city bombardment.
 
 <div dir="rtl" align="right">
 
-**شبیه‌سازی عمیق تمدن** — رشد شهر با غذا، گسترش مرز با فرهنگ، ۲۴ فناوری در ۶ عصر، ۱۵ نوع واحد (جنگجو تا تانک)، ۱۵ ساختمان، اقتصاد و هزینه نگهداری، کهنه‌کاری، دفاع زمین و سنگربندی.
-
-</div>
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-### 🎛️ Full admin dashboard
-Set the AI web service & API key, test the connection, fetch models, create games (choose count, model, personality, color & flag per civ — or **randomize everything**), control speed, swap a civ's model mid-game.
-
-<div dir="rtl" align="right">
-
-**پیشخوان مدیریت کامل** — تنظیم وب‌سرویس و کلید API، آزمایش اتصال، دریافت مدل‌ها، ساخت بازی (تعداد، مدل، شخصیت، رنگ و پرچم هر تمدن — یا **همه چیز تصادفی**)، کنترل سرعت و تعویض مدل وسط بازی.
+**شبیه‌سازی عمیق تمدن** — رشد با غذا، گسترش مرز با فرهنگ، ۲۴ فناوری در ۶ عصر، ۱۵ نوع واحد، ۱۵ ساختمان، اقتصاد، کهنه‌کاری و دفاع زمین.
 
 </div>
 </td>
 <td valign="top">
 
-### 📊 Results & analytics
-Rankings, per-model stats (requests, success rate, latency, tokens), progress charts (score, population, cities, military, techs, gold), searchable thought log with raw replies & prompts, event log, JSON export.
+### 🎛️ Admin dashboard & persistence
+API settings (saved in SQLite), connection test, model list, game wizard with **randomize everything**, speed control, swap a model mid-game, searchable thought log with raw replies & prompts, JSON export. Games resume after restart; a free `local-bot` model works without any key, and is the automatic fallback when a model fails.
 
 <div dir="rtl" align="right">
 
-**نتایج و تحلیل** — رتبه‌بندی، آمار هر مدل (درخواست، موفقیت، تأخیر، توکن)، نمودار پیشرفت، گزارش قابل جستجوی افکار همراه با پاسخ خام و پرامپت، رویدادها و خروجی JSON.
-
-</div>
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-### 💾 Persistent & resumable
-Settings, games, full engine state (saved every turn), events, thoughts and stats all live in **SQLite**. Restart the server — running games continue exactly where they stopped.
-
-<div dir="rtl" align="right">
-
-**ذخیره دائمی و قابل ادامه** — تنظیمات، بازی‌ها، وضعیت کامل موتور (هر نوبت)، رویدادها، افکار و آمار در **SQLite** ذخیره می‌شوند؛ با ری‌استارت سرور، بازی‌ها از همان‌جا ادامه می‌یابند.
-
-</div>
-</td>
-<td valign="top">
-
-### 🛡️ Robust by design
-Global rate limiter (respects 30 req/min), parallel model calls, tolerant JSON parsing, and an automatic **local heuristic AI fallback** whenever a model fails — the game never stalls. A free `local-bot` model lets you play without any API key.
-
-<div dir="rtl" align="right">
-
-**مقاوم و پایدار** — محدودکننده سرعت سراسری، فراخوانی موازی مدل‌ها، تجزیه مقاوم JSON و **جایگزینی خودکار با هوش محلی** هنگام خطای مدل؛ مدل رایگان `local-bot` برای بازی بدون کلید API.
+**پیشخوان مدیریت و ذخیره دائمی** — تنظیمات API در دیتابیس، آزمایش اتصال، ساخت بازی با حالت **همه چیز تصادفی**، کنترل سرعت، تعویض مدل وسط بازی، گزارش کامل افکار و خروجی JSON. بازی‌ها پس از ری‌استارت ادامه می‌یابند و مدل رایگان `local-bot` بدون کلید کار می‌کند.
 
 </div>
 </td>
@@ -166,23 +192,31 @@ Global rate limiter (respects 30 req/min), parallel model calls, tolerant JSON p
 
 <table>
 <tr>
-<td colspan="2"><img src="docs/images/screen-map.png" alt="World map"><p align="center"><b>World view</b> — territories, cities, armies, AI thoughts & leaderboard<br><sub>نمای کلی جهان — قلمروها، شهرها، ارتش‌ها، افکار هوش مصنوعی و جدول رتبه</sub></p></td>
+<td colspan="2"><img src="docs/images/screen-3d.png" alt="3D view"><p align="center"><b>3D perspective view</b> — sky, horizon, standing cities, flags and armies<br><sub>نمای سه‌بعدی پرسپکتیو — آسمان، افق، شهرها، پرچم‌ها و ارتش‌ها</sub></p></td>
 </tr>
 <tr>
-<td width="50%"><img src="docs/images/screen-focus.png" alt="Close-up"><p align="center"><b>Close-up</b> — waving flags, city labels, units<br><sub>نمای نزدیک — پرچم‌های در اهتزاز، شهرها و واحدها</sub></p></td>
-<td width="50%"><img src="docs/images/screen-diplo.png" alt="Diplomacy"><p align="center"><b>Diplomacy feed</b> — messages, wars, treaties<br><sub>دیپلماسی — پیام‌ها، جنگ‌ها و پیمان‌ها</sub></p></td>
+<td width="50%"><img src="docs/images/screen-3d-close.png" alt="3D close-up"><p align="center"><b>3D close-up</b> — deep zoom<br><sub>نمای نزدیک سه‌بعدی با زوم عمیق</sub></p></td>
+<td width="50%"><img src="docs/images/screen-3d-low.png" alt="3D low angle"><p align="center"><b>Low camera angle</b> — adjustable pitch<br><sub>زاویه پایین دوربین — قابل تنظیم</sub></p></td>
 </tr>
 <tr>
-<td><img src="docs/images/screen-admin-new.png" alt="New game"><p align="center"><b>New game wizard</b> — models, personalities, colors, flags, randomize<br><sub>ساخت بازی جدید — مدل، شخصیت، رنگ، پرچم و حالت تصادفی</sub></p></td>
-<td><img src="docs/images/screen-admin-results.png" alt="Results"><p align="center"><b>Results & analytics</b> — ranking, per-model stats, charts<br><sub>نتایج و تحلیل — رتبه‌بندی، آمار مدل‌ها و نمودار</sub></p></td>
+<td><img src="docs/images/screen-map.png" alt="Top-down"><p align="center"><b>Top-down view</b> — territories, cities, armies, leaderboard<br><sub>نمای از بالا — قلمروها، شهرها، ارتش‌ها و رتبه‌بندی</sub></p></td>
+<td><img src="docs/images/screen-chat.png" alt="Chat"><p align="center"><b>Chat with a leader</b><br><sub>گفتگو با رهبر هر تمدن</sub></p></td>
 </tr>
 <tr>
-<td><img src="docs/images/screen-admin-settings.png" alt="AI settings"><p align="center"><b>AI web-service settings</b><br><sub>تنظیمات وب‌سرویس هوش مصنوعی</sub></p></td>
-<td><img src="docs/images/screen-admin-games.png" alt="Games"><p align="center"><b>Games manager</b> — run, pause, step, delete<br><sub>مدیریت بازی‌ها — اجرا، توقف، یک نوبت، حذف</sub></p></td>
+<td><img src="docs/images/screen-report.png" alt="Battle report"><p align="center"><b>Battle report</b> — ranking, decision matrix, per-civ charts, quotes<br><sub>گزارش نبرد — رتبه‌بندی، ماتریس تصمیم، نمودار هر تمدن و نقل‌قول‌ها</sub></p></td>
+<td><img src="docs/images/screen-admin-analytics.png" alt="Model analytics"><p align="center"><b>Model analytics across battles</b><br><sub>تحلیل مدل‌ها در همه نبردها</sub></p></td>
+</tr>
+<tr>
+<td><img src="docs/images/screen-admin-new.png" alt="New game"><p align="center"><b>New game wizard</b><br><sub>ساخت بازی جدید</sub></p></td>
+<td><img src="docs/images/screen-admin-results.png" alt="Results"><p align="center"><b>Results & analytics</b><br><sub>نتایج و تحلیل</sub></p></td>
+</tr>
+<tr>
+<td><img src="docs/images/screen-admin-settings.png" alt="AI settings"><p align="center"><b>AI web-service settings</b> (Lemura recommended)<br><sub>تنظیمات وب‌سرویس (پیشنهاد: لمورا)</sub></p></td>
+<td><img src="docs/images/screen-focus.png" alt="Focus"><p align="center"><b>Civ focus</b> — live decision bars & thoughts<br><sub>تمرکز روی یک تمدن — نوار تصمیم و افکار زنده</sub></p></td>
 </tr>
 </table>
 
-<sub>Screenshots were captured from a demo match played by the built-in <code>local-bot</code> AI. · تصاویر از یک بازی نمایشی با هوش محلی داخلی گرفته شده‌اند.</sub>
+<sub>Screenshots come from demo matches played by the built-in <code>local-bot</code> AI (no API key). · تصاویر از بازی‌های نمایشی با هوش محلی داخلی (بدون کلید API) گرفته شده‌اند.</sub>
 
 ---
 
@@ -190,7 +224,7 @@ Global rate limiter (respects 30 req/min), parallel model calls, tolerant JSON p
 
 > **Requirements:** Python **3.10+** (or Docker). No Node.js, no build step, no external database.
 >
-> **پیش‌نیازها:** پایتون ۳.۱۰ به بالا (یا داکر). بدون نیاز به Node.js، بیلد یا دیتابیس خارجی.
+> **پیش‌نیازها:** پایتون ۳.۱۰ به بالا (یا داکر). بدون Node.js، بیلد یا دیتابیس خارجی.
 
 ### 🪟 Windows — one click / با یک کلیک
 
@@ -200,11 +234,9 @@ cd ai-playground
 start.bat
 ```
 
-`start.bat` creates a virtual env, installs dependencies, opens your browser and starts the server.
-
 <div dir="rtl" align="right">
 
-فایل `start.bat` محیط مجازی می‌سازد، وابستگی‌ها را نصب می‌کند، مرورگر را باز و سرور را اجرا می‌کند. بدون git هم می‌توانید از دکمه سبز **Code ← Download ZIP** استفاده کنید و روی `start.bat` دوبار کلیک کنید.
+`start.bat` محیط مجازی می‌سازد، وابستگی‌ها را نصب می‌کند، مرورگر را باز و سرور را اجرا می‌کند. بدون git: دکمه سبز **Code ← Download ZIP** و دوبار کلیک روی `start.bat`.
 
 </div>
 
@@ -224,8 +256,6 @@ cd ai-playground
 docker compose up -d --build
 ```
 
-Data persists in `./data` · داده‌ها در پوشه `./data` باقی می‌مانند.
-
 ### 🔧 Manual / دستی
 
 ```bash
@@ -235,61 +265,93 @@ pip install -r requirements.txt
 python run.py                      # → http://127.0.0.1:8080
 ```
 
-Then open **http://127.0.0.1:8080** · سپس این آدرس را در مرورگر باز کنید.
-
 ---
 
 ## 🧭 Step-by-step guide &nbsp;·&nbsp; راهنمای قدم‌به‌قدم
 
 | # | English | فارسی |
 |:-:|---|---|
-| 1 | Open the app and click the **shield icon** (top corner) → admin panel `/admin`. | برنامه را باز کنید و روی **آیکون سپر** (گوشه بالا) بزنید تا وارد پیشخوان مدیریت `/admin` شوید. |
-| 2 | **First login:** choose your admin password (min 6 chars). It is stored hashed in the DB. | **اولین ورود:** رمز مدیریت را خودتان تعیین کنید (حداقل ۶ کاراکتر)؛ به صورت هش در دیتابیس ذخیره می‌شود. |
-| 3 | Go to **AI web service**, keep the default base URL (Lemura) or enter any OpenAI-compatible one, paste your **API key**, click **Save**. | به بخش **وب‌سرویس هوش مصنوعی** بروید، آدرس پیش‌فرض (لمورا) یا هر آدرس سازگار با OpenAI را وارد کنید، **کلید API** را بگذارید و **ذخیره** کنید. |
-| 4 | Click **Test connection & fetch models** — the model list is cached in the DB. Optionally **Test chat** with one model. | روی **آزمایش اتصال و دریافت مدل‌ها** بزنید؛ فهرست مدل‌ها در دیتابیس ذخیره می‌شود. می‌توانید **گفتگوی آزمایشی** هم بگیرید. |
-| 5 | Open **New game**: set the number of civs (2–10), pick a model, personality, color and flag for each — or hit **🎲 Randomize everything** / **Random models only**. | به **بازی جدید** بروید: تعداد تمدن‌ها (۲ تا ۱۰)، مدل، شخصیت، رنگ و پرچم هر کدام را انتخاب کنید — یا **🎲 همه چیز تصادفی** / **فقط مدل‌ها تصادفی** را بزنید. |
-| 6 | Choose map size, seed, land ratio, max turns, *think every N turns*, turn delay and victory conditions → **Create & start**. | اندازه نقشه، بذر، نسبت خشکی، حداکثر نوبت، «هر چند نوبت فکر کند»، فاصله نوبت و شرایط پیروزی را تعیین و **ساخت و شروع** را بزنید. |
-| 7 | Watch on the home page. Click a civ card (or its territory) to focus the camera and filter its thoughts. Drag to pan, wheel to zoom, hover for tile/city info. | در صفحه اصلی تماشا کنید. با کلیک روی کارت تمدن (یا قلمروش) دوربین روی آن متمرکز و افکارش فیلتر می‌شود. کشیدن = جابه‌جایی، اسکرول = زوم، نگه‌داشتن ماوس = اطلاعات خانه و شهر. |
-| 8 | **Results**: rankings, model stats, charts, the complete thought log (with raw replies & prompts) and **JSON export**. | بخش **نتایج**: رتبه‌بندی، آمار مدل‌ها، نمودارها، گزارش کامل افکار (همراه پاسخ خام و پرامپت) و **خروجی JSON**. |
+| 1 | Open **http://127.0.0.1:8080** and click the **shield icon** → admin panel. | آدرس بالا را باز کنید و روی **آیکون سپر** بزنید تا وارد پیشخوان مدیریت شوید. |
+| 2 | **First login:** choose your admin password (stored hashed in the DB). | **اولین ورود:** رمز مدیریت را تعیین کنید (به‌صورت هش ذخیره می‌شود). |
+| 3 | Get a key from **[lemura.ir](https://lemura.ir)** (recommended) or any OpenAI-compatible provider. In **AI web service**, paste the key and **Save**. | از **[lemura.ir](https://lemura.ir)** (پیشنهادی) یا هر سرویس سازگار با OpenAI کلید بگیرید و در بخش **وب‌سرویس هوش مصنوعی** وارد و **ذخیره** کنید. |
+| 4 | **Test connection & fetch models**, optionally **test chat** with a model. | **آزمایش اتصال و دریافت مدل‌ها** و در صورت تمایل **گفتگوی آزمایشی** با یک مدل. |
+| 5 | **New game:** number of civs (2–10), model, personality, color and flag — or **🎲 Randomize everything**. | **بازی جدید:** تعداد تمدن، مدل، شخصیت، رنگ و پرچم — یا **🎲 همه چیز تصادفی**. |
+| 6 | Map size, seed, max turns, *think every N turns*, speed, victory conditions → **Create & start**. | اندازه نقشه، بذر، حداکثر نوبت، فاصله تفکر، سرعت و شرایط پیروزی ← **ساخت و شروع**. |
+| 7 | Watch: switch **از بالا / سه‌بعدی** (top / 3D), zoom, click a civ to focus, open **گفتگو** (chat) to talk to its leader. | تماشا: بین **از بالا / سه‌بعدی** جابه‌جا شوید، زوم کنید، روی تمدن کلیک کنید و در تب **گفتگو** با رهبرش حرف بزنید. |
+| 8 | **Battle report** (header button, or at victory) and **Model analytics** in the admin panel. | **گزارش نبرد** (دکمه بالای صفحه یا پس از پیروزی) و **تحلیل مدل‌ها** در پیشخوان. |
 
-> 💡 **No API key yet?** Choose the free **`local-bot`** model for every civ to try the game instantly.
->
-> 💡 **کلید API ندارید؟** برای همه تمدن‌ها مدل رایگان **`local-bot`** را انتخاب کنید و بلافاصله بازی را امتحان کنید.
+### 🎮 Map controls · کنترل نقشه
+
+| Action | Control |
+|---|---|
+| Pan · جابه‌جایی | drag / arrow keys / WASD |
+| Zoom · زوم | mouse wheel / `+` `-` / pinch |
+| Top ↔ 3D · تغییر نما | `V` or the view buttons |
+| Camera pitch (3D) · زاویه دوربین | `Shift` + wheel / `Q` `E` / ▲▼ buttons |
+| Focus a civ · تمرکز | click its card, city or territory |
+| Jump · پرش | click the minimap |
+
+> 💡 **No API key yet?** Use the free **`local-bot`** model for every civ. · بدون کلید API هم با مدل رایگان `local-bot` بازی را امتحان کنید.
+
+---
+
+## 📊 Decision analysis &nbsp;·&nbsp; تحلیل تصمیم‌گیری
+
+Each turn the model **declares** its main focus, and the engine also **measures** what it actually did (builds, unit orders, diplomacy). Both are stored per decision and aggregated per civilization, per game and per model.
+
+<div dir="rtl" align="right">
+
+در هر نوبت، مدل تمرکز اصلی خود را **اعلام** می‌کند و موتور بازی هم کارهای **واقعی** او (ساخت‌وساز، فرمان نظامی، دیپلماسی) را می‌سنجد. هر دو برای هر تصمیم ذخیره و برای هر تمدن، هر نبرد و هر مدل جمع‌بندی می‌شوند.
+
+</div>
+
+| Strategy | راهبرد | Counted from · بر اساس |
+|---|---|---|
+| 🟢 Growth | رشد | farms, granaries, temples · مزرعه، انبار غله، معبد |
+| 🔵 Expansion | توسعه | settlers, founding cities, exploring · مهاجر، شهر جدید، اکتشاف |
+| 🔷 Science | علم | libraries, universities, spaceport · کتابخانه، دانشگاه، پایگاه فضایی |
+| 🟡 Economy | اقتصاد | markets, banks, quarries, workshops, factories · بازار، بانک، معدن، کارخانه |
+| 🟤 Defense | دفاع | walls, castles, barracks, fortify, army in peace · حصار، قلعه، سنگربندی |
+| 🔴 Attack | حمله | war declarations, attack orders, army at war, siege · اعلان جنگ، حمله، محاصره |
+| 🟣 Alliance | اتحاد و دیپلماسی | alliances, peace, messages, gifts · اتحاد، صلح، پیام، هدیه |
+| ⚪ Neutrality | بی‌طرفی | turns without aggression or alliances at peace · نوبت‌های بدون درگیری و اتحاد |
+
+The **battle report** (`/report/<id>`) shows, for every civilization — winner or loser — a strategy donut, declared-focus bars, a focus timeline, key quotes, and stats (peak score, cities founded/captured/lost, kills, wars, alliances, betrayals, messages, model latency). It can be printed or saved as PDF.
+
+<div dir="rtl" align="right">
+
+**گزارش نبرد** (`/report/<id>`) برای هر تمدن — برنده یا بازنده — نمودار دایره‌ای راهبرد، تمرکز اعلام‌شده، روند زمانی، نقل‌قول‌های کلیدی و آمار کامل را نشان می‌دهد و قابل چاپ یا ذخیره به‌صورت PDF است.
+
+</div>
 
 ---
 
 ## 🔌 AI providers &nbsp;·&nbsp; ارائه‌دهنده‌های هوش مصنوعی
 
-All civilizations share **one** web service; only the `model` differs. Any server that implements the OpenAI Chat Completions API works.
-
-<div dir="rtl" align="right">
-
-همه تمدن‌ها از **یک** وب‌سرویس استفاده می‌کنند و فقط `model` آن‌ها فرق دارد. هر سرویسی که API گفتگوی OpenAI را پیاده‌سازی کند قابل استفاده است.
-
-</div>
+All civilizations share **one** web service; only the `model` differs.
 
 | Provider | Base URL | Notes |
 |---|---|---|
-| **Lemura** (default) | `https://lemura.ir/wp-json/lemuraai/v1` | one `lsk-…` key for GPT, Claude, Gemini & more · [docs](https://lemura.ir/docs) · 30 req/min |
+| ⭐ **[Lemura](https://lemura.ir)** (recommended · پیشنهادی) | `https://lemura.ir/wp-json/lemuraai/v1` | Iranian, easy, OpenAI-compatible · one `lsk-…` key for many models · [docs](https://lemura.ir/docs) |
 | OpenAI | `https://api.openai.com/v1` | `sk-…` key |
-| OpenRouter | `https://openrouter.ai/api/v1` | hundreds of models |
-| Ollama (local) | `http://localhost:11434/v1` | any non-empty key, e.g. `ollama` |
+| OpenRouter | `https://openrouter.ai/api/v1` | many models |
+| Ollama (local) | `http://localhost:11434/v1` | any non-empty key |
 | LM Studio (local) | `http://localhost:1234/v1` | any non-empty key |
 
-Endpoints used: `GET /models` (model list), `GET /me` (optional key check), `POST /chat/completions`.
-
 <details>
-<summary><b>⚙️ AI behaviour settings · تنظیمات رفتار مدل‌ها</b></summary>
+<summary><b>⚙️ AI & chat settings · تنظیمات مدل و گفتگو</b></summary>
 
 | Setting | Default | Description · توضیح |
 |---|---|---|
-| Requests per minute | `25` | global rate limit for all civs · محدودیت سراسری درخواست در دقیقه |
-| Temperature | `0.8` | creativity of decisions · میزان خلاقیت |
+| Requests per minute | `25` | global rate limit (Lemura allows 30/min) · محدودیت سراسری |
+| Temperature | `0.8` | creativity · خلاقیت |
 | Max tokens | `2500` | raise for reasoning models · برای مدل‌های استدلالی بیشتر کنید |
-| Timeout | `90 s` | after it, the local AI plays that turn · پس از آن هوش محلی جایگزین می‌شود |
-| Thought language | `fa` | Persian or English · زبان افکار |
-| JSON mode | off | sends `response_format: json_object` · ارسال حالت JSON |
-| Extra prompt | — | appended to every leader's system prompt · دستور اضافه برای همه رهبران |
+| Timeout | `90 s` | then the local AI plays that turn · پس از آن هوش محلی جایگزین می‌شود |
+| Thought language | `fa` | Persian / English |
+| JSON mode | off | `response_format: json_object` |
+| Public chat | off | let every visitor chat with leaders (otherwise admin only) · گفتگوی عمومی |
+| Chat messages / min / visitor | `6` | per-IP limit · محدودیت هر بازدیدکننده |
+| Chat max tokens | `1200` | |
 
 </details>
 
@@ -307,73 +369,54 @@ sequenceDiagram
     loop every N turns
         R->>E: civ_view(civ) for each living civ
         par one request per civilization (rate-limited)
-            R->>L: system rules + JSON state
-            L-->>R: thought, plan, memory, research, builds, orders, diplomacy
+            R->>L: rules + JSON state
+            L-->>R: thought, focus, plan, memory, research, builds, orders, diplomacy
         end
-        R->>E: apply_decision() - validate and queue orders
-        R->>DB: save thought, reasoning, actions, errors, tokens, latency
+        R->>E: classify decision + apply_decision()
+        R->>DB: save thought, focus, strategy weights, actions, errors, tokens
     end
     R->>E: step() - economy, research, movement, combat, diplomacy
     R->>DB: save full state, events, stats
 ```
 
-Each leader receives the rules (units, buildings, tech tree) plus a compact JSON view: treasury & income, cities (production queue, what it can build), units & current orders, **suggested city sites**, known rivals (relation, strength, nearest cities), threats near its borders, pending peace/alliance proposals, inbox messages, recent events, **errors from its last orders** and its own **memory** note. A reply looks like:
-
-<div dir="rtl" align="right">
-
-هر رهبر قوانین بازی و یک نمای فشرده JSON از وضعیت خودش را دریافت می‌کند: خزانه و درآمد، شهرها (صف تولید و موارد قابل ساخت)، واحدها و فرمان‌هایشان، **مکان‌های پیشنهادی شهر جدید**، رقبای شناخته‌شده (رابطه، قدرت، نزدیک‌ترین شهرها)، تهدیدهای نزدیک مرز، پیشنهادهای صلح و اتحاد، پیام‌های دریافتی، رویدادهای اخیر، **خطاهای فرمان‌های قبلی** و **یادداشت حافظه** خودش. نمونه پاسخ:
-
-</div>
-
 ```json
 {
-  "thought": "Babylon's army is twice mine and they border my capital. I'll ask for peace and build walls, while my settler takes the river site in the east.",
+  "thought": "Babylon's army is twice mine and borders my capital. I'll ask for peace and build walls while my settler takes the river site.",
+  "focus": "defense",
   "plan": "Turtle up, out-tech everyone, win the space race.",
-  "memory": "Babylon is aggressive. Iron at (21,9). Alliance with Atlantis pending.",
+  "memory": "Babylon is aggressive. Iron at (21,9).",
   "research": "masonry",
   "builds": [{ "city": 12, "items": ["walls", "archer"] }],
-  "orders": [
-    { "unit": 31, "action": "settle", "x": 24, "y": 11 },
-    { "unit": 27, "action": "fortify" }
-  ],
-  "diplomacy": [
-    { "civ": 3, "action": "propose_peace", "text": "Our peoples have bled enough." },
-    { "civ": 1, "action": "propose_alliance", "text": "Together we can stop Babylon." }
-  ]
+  "orders": [{ "unit": 31, "action": "settle", "x": 24, "y": 11 }, { "unit": 27, "action": "fortify" }],
+  "diplomacy": [{ "civ": 3, "action": "propose_peace", "text": "Our peoples have bled enough." }]
 }
 ```
 
-| Unit actions · فرمان واحد | Diplomacy actions · اقدامات دیپلماتیک |
+| Unit actions · فرمان واحد | Diplomacy · دیپلماسی |
 |---|---|
-| `move` · `attack` (`target_city` / `target_unit` / x,y) · `settle` · `fortify` · `explore` · `disband` | `declare_war` · `propose_peace` · `accept_peace` · `propose_alliance` · `accept_alliance` · `reject` · `break_alliance` · `message` · `gift_gold` |
+| `move` · `attack` · `settle` · `fortify` · `explore` · `disband` | `declare_war` · `propose_peace` · `accept_peace` · `propose_alliance` · `accept_alliance` · `reject` · `break_alliance` · `message` · `gift_gold` |
 
-**Personalities:** Free will (the model decides) · Aggressive · Scientific · Expansionist · Economic · Defensive · Diplomatic · Cultural
+**Personalities · شخصیت‌ها:** Free will · Aggressive · Scientific · Expansionist · Economic · Defensive · Diplomatic · Cultural — آزاد · جنگ‌طلب · علم‌محور · توسعه‌طلب · تجاری · دفاعی · دیپلمات · فرهنگی
 
-**شخصیت‌ها:** آزاد (تصمیم با مدل) · جنگ‌طلب · علم‌محور · توسعه‌طلب · تجاری · محتاط و دفاعی · دیپلمات · فرهنگی
-
-> If a model times out, errors, or returns invalid JSON, the built-in heuristic AI plays that turn and the error is logged — the match never stalls.
->
-> اگر مدلی پاسخ ندهد، خطا بدهد یا JSON نامعتبر بفرستد، هوش محلی آن نوبت را بازی می‌کند و خطا ثبت می‌شود — بازی هیچ‌وقت متوقف نمی‌شود.
+**Leader chat · گفتگو با رهبر:** the leader's model gets a persona prompt with its live state, plan, memory and last thoughts plus the chat history; it answers in character and in your language. Chat never changes game decisions. · مدل رهبر با وضعیت لحظه‌ای، برنامه، حافظه و افکار اخیرش در نقش رهبر پاسخ می‌دهد؛ گفتگو در تصمیم‌های بازی دخالتی ندارد.
 
 ---
 
 ## 📜 Game rules &nbsp;·&nbsp; قوانین بازی
 
-<details open>
+<details>
 <summary><b>🏆 Victory · پیروزی</b></summary>
 
 | Victory | Condition · شرط |
 |---|---|
-| ⚔️ **Domination** · فتح جهان | Last civilization standing · آخرین تمدن باقی‌مانده |
-| 🚀 **Science** · علمی | Research *Space Flight* and complete a **Spaceport** · کشف «پرواز فضایی» و ساخت «پایگاه فضایی» |
-| 👑 **Score** · امتیاز | Highest score when the turn limit is reached · بیشترین امتیاز در پایان زمان |
-
-Score = population × 4 + cities × 15 + techs × 8 + buildings × 2 + military × 0.3
+| ⚔️ Domination · فتح جهان | last civilization standing · آخرین تمدن باقی‌مانده |
+| 🚀 Science · علمی | Space Flight + Spaceport · پرواز فضایی و پایگاه فضایی |
+| 👑 Score · امتیاز | highest score at the turn limit · بیشترین امتیاز در پایان زمان |
 
 </details>
 
 <details>
-<summary><b>🔬 Eras & technologies · عصرها و فناوری‌ها (24)</b></summary>
+<summary><b>🔬 Eras & technologies (24)</b></summary>
 
 | Era · عصر | Technologies |
 |---|---|
@@ -387,192 +430,65 @@ Score = population × 4 + cities × 15 + techs × 8 + buildings × 2 + military 
 </details>
 
 <details>
-<summary><b>🗡️ Units · واحدها (15)</b></summary>
+<summary><b>🗡️ Units (15) & 🏗️ Buildings (15)</b></summary>
 
-| Unit · واحد | Strength | Ranged (range) | Move | Requires |
-|---|:-:|:-:|:-:|---|
-| Settler · مهاجر | – | – | 2 | — (costs 1 pop) |
-| Warrior · جنگجو | 3 | – | 1 | — |
-| Archer · کماندار | 2 | 4 (2) | 1 | Archery |
-| Spearman · نیزه‌دار | 6 (+50% vs mounted) | – | 1 | Bronze Working |
-| Horseman · سوار | 6 | – | 3 | Horseback Riding |
-| Swordsman · شمشیرزن | 9 | – | 1 | Iron Working |
-| Catapult · منجنیق | 4 | 9 (2), ×2 vs cities | 1 | Mathematics |
-| Knight · شوالیه | 13 | – | 3 | Chivalry |
-| Crossbowman · کمان‌پولادی | 6 | 11 (2) | 1 | Machinery |
-| Musketman · تفنگدار | 18 | – | 1 | Gunpowder |
-| Cannon · توپ | 8 | 20 (2), ×2 vs cities | 1 | Metallurgy |
-| Cavalry · سواره‌نظام | 24 | – | 3 | Military Science |
-| Rifleman · تفنگ‌دار مدرن | 30 | – | 1 | Rifling |
-| Artillery · توپخانه | 12 | 34 (3), ×2 vs cities | 1 | Industrialization |
-| Tank · تانک | 50 | – | 4 | Combustion |
+**Units:** Settler, Warrior, Archer, Spearman (+50% vs mounted), Horseman, Swordsman, Catapult (×2 vs cities), Knight, Crossbowman, Musketman, Cannon, Cavalry, Rifleman, Artillery, Tank.
 
-</details>
+**Buildings:** Farm, Granary, Temple, Quarry, Lumber Mill, Barracks, Walls, Library, Market, Workshop, University, Castle, Bank, Factory, Spaceport.
 
-<details>
-<summary><b>🏗️ Buildings · ساختمان‌ها (15)</b></summary>
-
-Farm (+2 food) · Granary (keeps food on growth) · Temple (+3 culture) · Quarry (+3 stone) · Lumber Mill (+3 wood) · Barracks (veteran units) · Walls (+defense, +HP) · Library (+3 science) · Market (+3 gold, +25%) · Workshop (+30% production) · University (+6 science, +25%) · Castle (+defense, needs walls) · Bank (+5 gold, +25%) · Factory (+50% production) · **Spaceport** (science victory)
-
-<div dir="rtl" align="right">
-
-مزرعه · انبار غله · معبد · معدن سنگ · چوب‌بری · سربازخانه · حصار · کتابخانه · بازار · کارگاه · دانشگاه · قلعه · بانک · کارخانه · **پایگاه فضایی** (پیروزی علمی)
-
-</div>
-</details>
-
-<details>
-<summary><b>⚙️ Mechanics · سازوکارها</b></summary>
-
-- **Resources:** gold, wood, stone (treasury) + food (per city) + science + culture. Items are paid on completion; production pauses if the treasury is short.
-- **Growth:** surplus food fills a city's store; each new citizen works the best tile in the city's territory.
-- **Borders:** culture grows the city radius from 2 to 5 tiles.
-- **Combat:** strength × health × veterancy × terrain (forest +25%, hills +50%) × fortify (+25%). Ranged units take no counter-damage. Siege units deal double damage to cities. Only melee units can capture a city at 0 HP.
-- **Cities defend themselves**, bombarding enemies within 2 tiles, and heal when not attacked.
-- **Upkeep:** armies larger than `2 × cities + 1` cost gold every turn; bankruptcy disbands units.
-- **Contact:** civs must meet (units/cities within 9 tiles) before any diplomacy.
-- **Calendar:** 4000 BC → modern age; years per turn shrink as history advances.
-
-<div dir="rtl" align="right">
-
-- **منابع:** طلا، چوب و سنگ (خزانه) + غذا (برای هر شهر) + علم + فرهنگ. هزینه هنگام تکمیل پرداخت می‌شود و اگر منابع کافی نباشد تولید می‌ایستد.
-- **رشد:** غذای مازاد انبار شهر را پر می‌کند و هر شهروند جدید روی بهترین خانه قلمرو کار می‌کند.
-- **مرزها:** فرهنگ شعاع شهر را از ۲ تا ۵ خانه گسترش می‌دهد.
-- **نبرد:** قدرت × سلامت × کهنه‌کاری × زمین (جنگل ٪۲۵+، تپه ٪۵۰+) × سنگربندی. واحدهای تیرانداز آسیب متقابل نمی‌بینند؛ ادوات محاصره دو برابر به شهر آسیب می‌زنند؛ فقط واحد نزدیک‌زن شهر را تصرف می‌کند.
-- **شهرها از خود دفاع می‌کنند** و دشمنان تا فاصله ۲ خانه را هدف می‌گیرند.
-- **نگهداری:** ارتش بزرگ‌تر از `۲ × شهرها + ۱` هر نوبت طلا مصرف می‌کند؛ ورشکستگی باعث انحلال واحد می‌شود.
-- **ملاقات:** دیپلماسی فقط پس از ملاقات (فاصله ۹ خانه) ممکن است.
-- **تقویم:** از ۴۰۰۰ پیش از میلاد تا عصر مدرن.
-
-</div>
 </details>
 
 ---
 
 ## 🏗️ Architecture &nbsp;·&nbsp; معماری
 
-```mermaid
-flowchart LR
-    subgraph Browser["Frontend - vanilla JS + Canvas"]
-        V["Spectator view<br/>render.js, view.js"]
-        A["Admin dashboard<br/>admin.js"]
-    end
-    subgraph Server["Backend - Python / Flask"]
-        W["web.py<br/>pages + JSON API"]
-        RU["runner.py<br/>game threads"]
-        EN["engine.py<br/>simulation"]
-        AI["ai.py<br/>prompts, parser, local bot"]
-        MG["mapgen.py"]
-        DB[("SQLite<br/>db.py")]
-    end
-    LLM["OpenAI-compatible<br/>LLM web service"]
-    V -- "poll /api/game/:id/state" --> W
-    A -- "/api/admin/*" --> W
-    W --> RU --> EN
-    EN --> MG
-    RU --> AI -- "/chat/completions" --> LLM
-    RU --> DB
-    W --> DB
-```
-
 ```
 ai-playground/
-├── run.py                    # entry point (waitress / Flask)
-├── start.bat · start.sh      # one-click launchers
-├── Dockerfile · docker-compose.yml
-├── requirements.txt          # flask, waitress
+├── run.py · start.bat · start.sh · Dockerfile · docker-compose.yml
 └── civarena/
-    ├── rules.py              # terrain, resources, techs, units, buildings, personalities
-    ├── mapgen.py             # procedural map + start positions
-    ├── engine.py             # turn simulation (JSON state), combat, diplomacy, AI view
-    ├── ai.py                 # LLM client, rate limiter, prompts, JSON parsing, local bot
-    ├── runner.py             # background loop per game, parallel AI decisions
-    ├── db.py                 # SQLite: settings, games, events, thoughts, stats
-    ├── web.py                # Flask routes (public + admin API)
-    ├── templates/            # view.html · admin.html · login.html
-    └── static/
-        ├── css/app.css       # dark theme, RTL, responsive
-        └── js/               # common.js · render.js · view.js · admin.js
+    ├── rules.py       # terrain, techs, units, buildings, personalities
+    ├── mapgen.py      # procedural map
+    ├── engine.py      # simulation, combat, diplomacy, tallies, AI view
+    ├── analysis.py    # 8-strategy decision classifier
+    ├── ai.py          # LLM client, rate limiter, prompts, parser, leader chat, local bot
+    ├── runner.py      # background game loops, parallel AI decisions
+    ├── db.py          # SQLite: settings, games, events, thoughts, stats, chats
+    ├── web.py         # Flask: pages, public API, chat, report, admin API, analytics
+    ├── templates/     # view · report · admin · login
+    └── static/js/     # render.js (top-down + 3D camera) · view.js · charts.js · report.js · admin.js
 ```
 
 <details>
-<summary><b>🔗 HTTP API reference</b></summary>
-
-**Public**
+<summary><b>🔗 HTTP API</b></summary>
 
 | Method | Path | Description |
 |---|---|---|
 | GET | `/api/games` | list games |
-| GET | `/api/game/<id>/static` | map tiles, resources, civ identities |
-| GET | `/api/game/<id>/state?ev=&th=&t=` | turn, civs, cities, units, territory, effects, new events & thoughts |
-
-**Admin** (session cookie, plus header `X-Requested-With: civarena` on POST)
-
-| Method | Path | Description |
-|---|---|---|
-| GET / POST | `/api/admin/settings` | read / save settings (the key is write-only) |
-| POST | `/api/admin/test` | check key, fetch models, optional test chat |
-| POST | `/api/admin/models/refresh` | refresh cached models |
-| POST | `/api/admin/random_setup` | random civs (`count`, `models`) |
-| POST | `/api/admin/games` | create a game |
-| POST | `/api/admin/game/<id>/start` · `pause` · `step` · `delete` | control a game |
-| POST | `/api/admin/game/<id>/speed` | `turn_delay`, `think_every` |
-| POST | `/api/admin/game/<id>/model` | swap a civ's model mid-game |
-| GET | `/api/admin/game/<id>/report` | ranking, stats history, AI stats |
-| GET | `/api/admin/game/<id>/thoughts?civ=&q=&before=` | thought log |
-| GET | `/api/admin/game/<id>/events?kind=` | event log |
-| GET | `/api/admin/game/<id>/export` | full JSON export |
+| GET | `/api/game/<id>/static` · `/state` | map, live state, new events & thoughts |
+| GET | `/api/game/<id>/battle` · page `/report/<id>` | battle report data |
+| GET / POST | `/api/game/<id>/chat/<civ>` | chat history / send a message (admin or public chat) |
+| GET / POST | `/api/admin/settings` | settings (key is write-only) |
+| POST | `/api/admin/test` · `/models/refresh` · `/random_setup` · `/games` | connection, models, random civs, create game |
+| POST | `/api/admin/game/<id>/start\|pause\|step\|delete\|speed\|model` | control a game |
+| GET | `/api/admin/game/<id>/report` · `/thoughts` · `/events` · `/export` | results |
+| GET | `/api/admin/analytics/models` | cross-game model analytics |
 
 </details>
-
----
-
-## ⚙️ Configuration &nbsp;·&nbsp; پیکربندی
-
-| CLI flag | Env variable | Default |
-|---|---|---|
-| `--host` | `CIVARENA_HOST` | `127.0.0.1` (`0.0.0.0` in Docker) |
-| `--port` | `CIVARENA_PORT` | `8080` |
-| `--db` | `CIVARENA_DB` | `data/civarena.db` |
-| `--dev` | — | use Flask's dev server instead of waitress |
-
-Everything else (API URL & key, rate limit, temperature, tokens, language, defaults) is edited in the admin panel and **saved in the database**.
-
-<div dir="rtl" align="right">
-
-بقیه تنظیمات (آدرس و کلید API، محدودیت سرعت، دما، توکن، زبان و پیش‌فرض‌ها) از پیشخوان مدیریت ویرایش و **در دیتابیس ذخیره** می‌شوند.
-
-</div>
-
-### 💰 Cost tips · نکات صرفه‌جویی
-
-- Total requests ≈ `max_turns ÷ think_every × AI civs` — the new-game page shows this estimate live.
-- Raise **think every N turns** (e.g. 3–5): between decisions, units keep executing their standing orders.
-- Mix paid models with free `local-bot` opponents.
-
-<div dir="rtl" align="right">
-
-- تعداد کل درخواست‌ها تقریباً برابر `حداکثر نوبت ÷ فاصله تفکر × تعداد تمدن‌های هوشمند` است و صفحه ساخت بازی آن را نشان می‌دهد.
-- «هر چند نوبت فکر کند» را بالاتر ببرید (مثلاً ۳ تا ۵)؛ واحدها بین تصمیم‌ها فرمان قبلی را ادامه می‌دهند.
-- مدل‌های پولی را با حریف‌های رایگان `local-bot` ترکیب کنید.
-
-</div>
 
 ---
 
 ## 🌐 Deploy on a server &nbsp;·&nbsp; راه‌اندازی روی سرور
 
 <details>
-<summary><b>systemd + nginx (Ubuntu / Debian)</b></summary>
+<summary><b>systemd + nginx</b></summary>
 
 ```bash
 sudo git clone https://github.com/deveguru/ai-playground.git /opt/ai-playground
 cd /opt/ai-playground && sudo python3 -m venv .venv && sudo .venv/bin/pip install -r requirements.txt
 ```
 
-`/etc/systemd/system/civarena.service`
-
 ```ini
+# /etc/systemd/system/civarena.service
 [Unit]
 Description=AI Civilization Arena
 After=network.target
@@ -587,40 +503,14 @@ Environment=PYTHONIOENCODING=utf-8
 WantedBy=multi-user.target
 ```
 
-```bash
-sudo systemctl daemon-reload && sudo systemctl enable --now civarena
-```
-
-nginx:
-
 ```nginx
 server {
     server_name arena.example.com;
-    location / {
-        proxy_pass http://127.0.0.1:8080;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-For $remote_addr;
-    }
+    location / { proxy_pass http://127.0.0.1:8080; proxy_set_header Host $host; proxy_set_header X-Forwarded-For $remote_addr; }
 }
 ```
 
-Add HTTPS with `certbot --nginx`. Run **one** process only (the game loops live inside that process).
-
-<div dir="rtl" align="right">
-
-با `certbot` گواهی HTTPS بگیرید. فقط **یک** پروسه اجرا کنید، چون حلقه بازی‌ها داخل همان پروسه است.
-
-</div>
-</details>
-
-<details>
-<summary><b>Docker on a VPS</b></summary>
-
-```bash
-git clone https://github.com/deveguru/ai-playground.git && cd ai-playground
-docker compose up -d --build
-docker compose logs -f
-```
+Run **one** process only (game loops live inside it). · فقط **یک** پروسه اجرا کنید.
 
 </details>
 
@@ -629,71 +519,68 @@ docker compose logs -f
 ## ❓ FAQ &nbsp;·&nbsp; پرسش‌های رایج
 
 <details>
-<summary><b>I forgot the admin password · رمز مدیریت را فراموش کرده‌ام</b></summary>
-
-Delete the stored hash, then set a new password on the next login:
+<summary><b>Forgot the admin password · فراموشی رمز مدیریت</b></summary>
 
 ```bash
 python -c "import sqlite3; c=sqlite3.connect('data/civarena.db'); c.execute(\"DELETE FROM settings WHERE key='admin_hash'\"); c.commit()"
 ```
-
-با دستور بالا هش رمز حذف می‌شود و در ورود بعدی رمز جدید تعیین می‌کنید.
-
+Then set a new password on the next login. · سپس در ورود بعدی رمز جدید تعیین کنید.
 </details>
 
 <details>
-<summary><b>Thoughts show “[error … local AI]” · افکار با پیام خطا و «هوش محلی» نمایش داده می‌شوند</b></summary>
+<summary><b>Thoughts show “[error … local AI]” · خطای مدل</b></summary>
 
-The model call failed (bad key, no balance — HTTP 402, rate limit — 429, unknown model — 404, or invalid JSON). Open **Results → thought log** to see the exact error, the raw reply and the prompt. Reasoning models may need a larger **max tokens**; some models work better with **JSON mode** on.
-
-فراخوانی مدل شکست خورده است (کلید نامعتبر، موجودی ناکافی، محدودیت سرعت، مدل ناشناخته یا JSON نامعتبر). در بخش **نتایج** خطای دقیق، پاسخ خام و پرامپت را ببینید. برای مدل‌های استدلالی **حداکثر توکن** را بیشتر کنید.
-
+The model call failed (bad key, no balance — 402, rate limit — 429, unknown model — 404, invalid JSON). See **Results → thought log** for the error, raw reply and prompt. Raise **max tokens** for reasoning models. · خطای دقیق، پاسخ خام و پرامپت را در بخش نتایج ببینید.
 </details>
 
 <details>
-<summary><b>The game is slow · بازی کند پیش می‌رود</b></summary>
+<summary><b>3D mode is slow on my PC · حالت سه‌بعدی کند است</b></summary>
 
-Speed is bounded by model latency and the rate limit (e.g. 6 civs × 1 request every 2 turns at 25 req/min ≈ 8 turns/min). Increase *think every*, lower the turn delay, or raise *requests per minute* if your provider allows it.
-
-سرعت به تأخیر مدل‌ها و محدودیت درخواست بستگی دارد. «هر چند نوبت فکر کند» را بیشتر یا فاصله نوبت را کمتر کنید.
-
+Switch to **از بالا** (top-down) with `V`, or zoom in a little — fewer objects are drawn. The 3D mode uses only Canvas 2D and works without a GPU. · با `V` به نمای از بالا برگردید یا کمی زوم کنید.
 </details>
 
 <details>
-<summary><b>Is my API key safe? · کلید API امن است؟</b></summary>
+<summary><b>Can visitors chat with leaders? · بازدیدکنندگان می‌توانند گفتگو کنند؟</b></summary>
 
-The key is stored only in your local SQLite database, is never sent to the browser (the UI shows a masked hint) and is only used server-side to call the provider you configured. Keep `data/` private — it is git-ignored.
+By default only the admin can (chat uses your API credit). Enable **Public chat** in settings; a per-IP limit protects your key. · به‌صورت پیش‌فرض فقط مدیر؛ با فعال‌کردن «گفتگوی عمومی» همه می‌توانند، با محدودیت هر IP.
+</details>
 
-کلید فقط در دیتابیس محلی شما ذخیره می‌شود، هرگز به مرورگر ارسال نمی‌شود و فقط سمت سرور استفاده می‌شود. پوشه `data/` را خصوصی نگه دارید.
+<details>
+<summary><b>Is my API key safe? · امنیت کلید API</b></summary>
 
+It is stored only in your local SQLite database and never sent to the browser. Keep `data/` private (git-ignored). · کلید فقط در دیتابیس محلی شما ذخیره می‌شود.
 </details>
 
 ---
 
 ## 🗺️ Roadmap &nbsp;·&nbsp; برنامه آینده
 
-- [ ] Naval units & sea travel · واحدهای دریایی
+- [ ] Naval units · واحدهای دریایی
 - [ ] Wonders & great people · عجایب جهان
-- [ ] Fog of war per civilization · مه جنگ
-- [ ] Tournament mode (round-robin between models + Elo) · حالت مسابقه و رتبه‌بندی Elo
-- [ ] Replay timeline scrubber · بازپخش بازی
-- [ ] Human player seat · امکان بازی انسان در کنار مدل‌ها
+- [ ] Fog of war · مه جنگ
+- [ ] Tournament mode with Elo · مسابقه و رتبه‌بندی Elo
+- [ ] Replay timeline · بازپخش بازی
+- [ ] Human player seat · بازی انسان کنار مدل‌ها
 
 ## 🤝 Contributing &nbsp;·&nbsp; مشارکت
 
-Issues and pull requests are welcome! Fork → create a branch → commit → open a PR. Please keep the frontend dependency-free (vanilla JS) and the backend small.
-
-از گزارش مشکل و Pull Request استقبال می‌شود! فورک کنید، شاخه بسازید، تغییرات را ثبت و PR باز کنید.
+Issues and pull requests are welcome (contributions are accepted under the same license). · گزارش مشکل و Pull Request پذیرفته می‌شود.
 
 ## 📄 License &nbsp;·&nbsp; مجوز
 
-[MIT](LICENSE) — free for personal and commercial use · استفاده آزاد شخصی و تجاری.
+**Personal use only** — free to download, install, run and modify for personal, non-commercial use. Commercial use, resale and redistribution are not permitted without written permission. See [LICENSE](LICENSE).
+
+<div dir="rtl" align="right">
+
+**فقط استفاده شخصی** — دانلود، نصب، اجرا و تغییر برای استفاده شخصی و غیرتجاری آزاد است. استفاده تجاری، فروش و بازنشر بدون اجازه کتبی مجاز نیست. جزئیات در [LICENSE](LICENSE).
+
+</div>
 
 <div align="center">
 <br>
 
-**If you enjoy watching AIs fight for the world, please ⭐ the repo!**
+**Recommended AI service · وب‌سرویس پیشنهادی: [lemura.ir](https://lemura.ir)**
 
-**اگر از تماشای نبرد هوش‌های مصنوعی لذت بردید، به پروژه ⭐ بدهید!**
+**If you enjoy watching AIs fight for the world, please ⭐ the repo!**
 
 </div>
