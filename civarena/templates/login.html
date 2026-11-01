@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ورود مدیریت</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+<link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body>
+<div class="login">
+  <form class="card" method="post" action="/admin/login">
+    <div class="brand" style="margin-bottom:18px">
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div>پیشخوان مدیریت<small>نبرد تمدن‌های هوش مصنوعی</small></div>
+    </div>
+    {% if first %}
+      <div class="note" style="margin-bottom:14px">اولین ورود: یک رمز عبور برای مدیریت انتخاب کنید (حداقل ۶ کاراکتر). این رمز در پایگاه داده به صورت هش ذخیره می‌شود.</div>
+    {% endif %}
+    {% if error %}<div class="note err" style="margin-bottom:14px">{{ error }}</div>{% endif %}
+    <div class="field"><label class="f">رمز عبور</label><input class="inp" type="password" name="password" autofocus required></div>
+    {% if first %}<div class="field"><label class="f">تکرار رمز عبور</label><input class="inp" type="password" name="password2" required></div>{% endif %}
+    <button class="btn gold" style="width:100%;justify-content:center;padding:10px">{{ 'ساخت رمز و ورود' if first else 'ورود' }}</button>
+    <div style="text-align:center;margin-top:14px"><a href="/">بازگشت به نقشه</a></div>
+  </form>
+</div>
+</body>
+</html>

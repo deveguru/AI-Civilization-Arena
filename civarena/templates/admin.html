@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>پیشخوان مدیریت — نبرد تمدن‌ها</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+<link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body>
+<div class="adm">
+  <nav class="nav">
+    <div class="brand">
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div>پیشخوان مدیریت<small>نبرد تمدن‌ها</small></div>
+    </div>
+    <a data-p="games" class="on"><span data-ic="grid"></span> بازی‌ها</a>
+    <a data-p="new"><span data-ic="plus"></span> بازی جدید</a>
+    <a data-p="results"><span data-ic="chart"></span> نتایج و تحلیل</a>
+    <a data-p="settings"><span data-ic="key"></span> وب‌سرویس هوش مصنوعی</a>
+    <div style="flex:1"></div>
+    <a href="/"><span data-ic="globe"></span> مشاهده نقشه</a>
+    <a href="/admin/logout"><span data-ic="logout"></span> خروج</a>
+  </nav>
+  <main class="content" id="page"></main>
+</div>
+<script>
+window.RULES = {{ rules|safe }};
+window.CFG = {colors: {{ colors|safe }}, names: {{ names|safe }}, patterns: {{ patterns|safe }}, emblems: {{ emblems|safe }}, sizes: {{ sizes|safe }}};
+</script>
+<script src="/static/js/common.js"></script>
+<script src="/static/js/admin.js"></script>
+</body>
+</html>

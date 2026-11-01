@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>نبرد تمدن‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+<link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V3"/><path d="M4 4h12l-2 4 2 4H4"/></svg></div>
+      <div>نبرد تمدن‌های هوش مصنوعی<small id="gname">—</small></div>
+    </div>
+    <select id="gsel" class="inp" style="width:auto;max-width:240px"></select>
+    <span id="gstatus" class="pill">—</span>
+    <div class="clock">
+      <div style="text-align:center">
+        <div class="turn" id="era">—</div>
+        <div class="progress"><i id="tprog" style="width:0"></i></div>
+      </div>
+      <div class="year" id="year">—</div>
+      <div class="turn" id="turn">نوبت —</div>
+    </div>
+    <a class="btn icon" href="/admin" title="ورود به پیشخوان مدیریت" id="adminBtn"><span id="adminIc"></span></a>
+  </header>
+  <div class="main">
+    <aside class="side">
+      <h3><span id="icCivs"></span> تمدن‌ها <span class="dim" style="margin-inline-start:auto;font-weight:400" id="civCount"></span></h3>
+      <div class="scroll" id="civs"></div>
+    </aside>
+    <section class="mapwrap" id="mapwrap">
+      <canvas id="map"></canvas>
+      <canvas id="mini" width="200" height="130"></canvas>
+      <div class="legend" id="toasts"></div>
+      <div class="mapctl">
+        <button class="btn icon" id="zin" title="بزرگ‌نمایی"></button>
+        <button class="btn icon" id="zout" title="کوچک‌نمایی"></button>
+        <button class="btn icon" id="zfit" title="نمای کامل"></button>
+        <button class="btn icon" id="zgrid" title="شبکه"></button>
+      </div>
+      <div id="tip"></div>
+      <div class="empty" id="empty" style="display:none"><div class="card">
+        <div style="font-size:18px;font-weight:800;margin-bottom:8px">هنوز بازی‌ای ساخته نشده</div>
+        <div class="muted" style="line-height:1.9">از پیشخوان مدیریت، کلید وب‌سرویس هوش مصنوعی را تنظیم کنید و یک بازی جدید با مدل‌های دلخواه بسازید.</div>
+        <a class="btn gold" href="/admin" style="margin-top:16px">ورود به پیشخوان مدیریت</a>
+      </div></div>
+    </section>
+    <aside class="side">
+      <div class="tabs">
+        <div class="tab on" data-tab="thoughts"><span class="ti" data-ic="brain"></span> ذهن هوش مصنوعی</div>
+        <div class="tab" data-tab="events"><span class="ti" data-ic="scroll"></span> رویدادها</div>
+        <div class="tab" data-tab="diplo"><span class="ti" data-ic="msg"></span> دیپلماسی</div>
+      </div>
+      <div class="filterbar" id="filter"></div>
+      <div class="scroll" id="feed"></div>
+    </aside>
+  </div>
+</div>
+<script>window.RULES = {{ rules|safe }};</script>
+<script src="/static/js/common.js"></script>
+<script src="/static/js/render.js"></script>
+<script src="/static/js/view.js"></script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="420" viewBox="0 0 1280 420">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1020"/>
+      <stop offset=".55" stop-color="#141c3a"/>
+      <stop offset="1" stop-color="#2a1640"/>
+    </linearGradient>
+    <radialGradient id="glow" cx=".72" cy=".2" r=".6">
+      <stop offset="0" stop-color="#2f4ea0" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#2f4ea0" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe08a"/>
+      <stop offset="1" stop-color="#c8932f"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d4f8f"/>
+      <stop offset="1" stop-color="#123060"/>
+    </linearGradient>
+    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#ffffff" stroke-opacity=".045"/>
+    </pattern>
+    <filter id="soft"><feGaussianBlur stdDeviation="6"/></filter>
+    <clipPath id="mapclip"><rect x="770" y="40" width="470" height="340" rx="26"/></clipPath>
+  </defs>
+
+  <rect width="1280" height="420" fill="url(#bg)"/>
+  <rect width="1280" height="420" fill="url(#glow)"/>
+  <rect width="1280" height="420" fill="url(#grid)"/>
+
+  <!-- mini world -->
+  <g clip-path="url(#mapclip)">
+    <rect x="770" y="40" width="470" height="340" fill="url(#sea)"/>
+    <g filter="url(#soft)" opacity=".9">
+      <path d="M820 120 C850 70 960 60 1010 95 C1060 60 1150 70 1190 120 C1230 170 1200 240 1170 270 C1150 330 1060 350 1000 330 C930 360 850 330 825 280 C795 230 795 170 820 120Z" fill="#6aa84f"/>
+    </g>
+    <path d="M820 120 C850 70 960 60 1010 95 C1060 60 1150 70 1190 120 C1230 170 1200 240 1170 270 C1150 330 1060 350 1000 330 C930 360 850 330 825 280 C795 230 795 170 820 120Z" fill="#7cb35a" stroke="#e8f4ff" stroke-opacity=".35" stroke-width="3"/>
+    <path d="M960 160 l22 -34 22 34z M990 170 l18 -28 18 28z" fill="#a19a92"/>
+    <path d="M982 126 l-8 12 h16z" fill="#fff"/>
+    <ellipse cx="1080" cy="250" rx="60" ry="30" fill="#d8bd78" opacity=".8"/>
+    <!-- territories -->
+    <path d="M820 120 C850 70 960 60 1000 100 L990 200 L900 215 L815 200 C800 170 805 140 820 120Z" fill="#e53935" fill-opacity=".28" stroke="#e53935" stroke-width="3"/>
+    <path d="M1010 95 C1060 60 1150 70 1190 120 C1210 150 1205 180 1195 200 L1090 205 L1010 190Z" fill="#1e88e5" fill-opacity=".28" stroke="#1e88e5" stroke-width="3"/>
+    <path d="M825 280 C805 250 805 225 815 210 L905 222 L960 260 L955 335 C900 345 850 325 825 280Z" fill="#43a047" fill-opacity=".3" stroke="#43a047" stroke-width="3"/>
+    <path d="M1000 330 C1060 350 1150 330 1170 270 C1180 250 1190 230 1195 212 L1095 215 L1015 250Z" fill="#fdd835" fill-opacity=".25" stroke="#fdd835" stroke-width="3"/>
+    <!-- cities -->
+    <g>
+      <circle cx="890" cy="150" r="13" fill="#b71c1c" stroke="#fff" stroke-width="2"/>
+      <circle cx="1120" cy="140" r="13" fill="#0d47a1" stroke="#fff" stroke-width="2"/>
+      <circle cx="880" cy="270" r="13" fill="#1b5e20" stroke="#fff" stroke-width="2"/>
+      <circle cx="1100" cy="285" r="13" fill="#f9a825" stroke="#fff" stroke-width="2"/>
+      <!-- flags -->
+      <g><line x1="898" y1="146" x2="898" y2="118" stroke="#3b2b1b" stroke-width="2"/>
+        <path d="M898 118 h22 v14 h-22z" fill="#e53935"><animate attributeName="d" dur="1.6s" repeatCount="indefinite" values="M898 118 h22 v14 h-22z;M898 118 q11 -4 22 0 v14 q-11 -4 -22 0z;M898 118 h22 v14 h-22z"/></path></g>
+      <g><line x1="1128" y1="136" x2="1128" y2="108" stroke="#3b2b1b" stroke-width="2"/>
+        <path d="M1128 108 h22 v14 h-22z" fill="#1e88e5"><animate attributeName="d" dur="1.4s" repeatCount="indefinite" values="M1128 108 h22 v14 h-22z;M1128 108 q11 4 22 0 v14 q-11 4 -22 0z;M1128 108 h22 v14 h-22z"/></path>
+        <rect x="1135" y="108" width="4" height="14" fill="#fff"/></g>
+      <g><line x1="888" y1="266" x2="888" y2="238" stroke="#3b2b1b" stroke-width="2"/>
+        <path d="M888 238 h22 v14 h-22z" fill="#43a047"><animate attributeName="d" dur="1.7s" repeatCount="indefinite" values="M888 238 h22 v14 h-22z;M888 238 q11 -4 22 0 v14 q-11 -4 -22 0z;M888 238 h22 v14 h-22z"/></path></g>
+      <g><line x1="1108" y1="281" x2="1108" y2="253" stroke="#3b2b1b" stroke-width="2"/>
+        <path d="M1108 253 h22 v14 h-22z" fill="#fdd835"><animate attributeName="d" dur="1.5s" repeatCount="indefinite" values="M1108 253 h22 v14 h-22z;M1108 253 q11 4 22 0 v14 q-11 4 -22 0z;M1108 253 h22 v14 h-22z"/></path></g>
+    </g>
+    <!-- armies & battle -->
+    <g>
+      <circle r="8" fill="#141a2b" stroke="#e53935" stroke-width="3">
+        <animateMotion dur="5s" repeatCount="indefinite" path="M930 175 C980 170 1030 160 1080 150"/>
+      </circle>
+      <circle r="8" fill="#141a2b" stroke="#43a047" stroke-width="3">
+        <animateMotion dur="6s" repeatCount="indefinite" path="M910 260 C960 280 1010 290 1070 285"/>
+      </circle>
+      <circle cx="1095" cy="148" r="4" fill="#ffd54f">
+        <animate attributeName="r" values="2;22;2" dur="5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;0;.9;0" keyTimes="0;.75;.85;1" dur="5s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+  </g>
+  <rect x="770" y="40" width="470" height="340" rx="26" fill="none" stroke="#f2c14e" stroke-opacity=".5" stroke-width="2"/>
+
+  <!-- thought bubble -->
+  <g>
+    <rect x="992" y="350" width="262" height="52" rx="14" fill="#0b1020" fill-opacity=".9" stroke="#f2c14e" stroke-opacity=".6"/>
+    <circle cx="1014" cy="376" r="9" fill="#1e88e5"/>
+    <text x="1032" y="372" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#e8ecf6" font-weight="700">Blue civ · LLM thinking…</text>
+    <text x="1032" y="390" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#a9b3cc">"Their walls are weak. Declare war."</text>
+    <circle cx="1242" cy="365" r="3" fill="#f2c14e"><animate attributeName="opacity" values=".2;1;.2" dur="1s" repeatCount="indefinite"/></circle>
+  </g>
+
+  <!-- title -->
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <rect x="64" y="70" width="64" height="64" rx="18" fill="url(#gold)"/>
+    <path d="M84 120 V84 M84 86 h26 l-5 9 5 9 h-26" fill="none" stroke="#2a1b00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="146" y="100" font-size="20" fill="#f2c14e" font-weight="700" letter-spacing="3">AI PLAYGROUND</text>
+    <text x="146" y="128" font-size="14" fill="#a9b3cc">open-source · python · flask · canvas</text>
+    <text x="64" y="205" font-size="54" font-weight="800" fill="#ffffff">AI Civilization Arena</text>
+    <text x="64" y="262" font-size="36" font-weight="700" fill="url(#gold)" font-family="Vazirmatn, Tahoma, Segoe UI, sans-serif">نبرد تمدن‌های هوش مصنوعی</text>
+    <text x="64" y="310" font-size="18" fill="#c9d1e6">Different LLMs lead rival civilizations — build, research,</text>
+    <text x="64" y="336" font-size="18" fill="#c9d1e6">negotiate and conquer, while you read every thought.</text>
+    <g font-size="13" font-weight="700">
+      <rect x="64" y="358" width="118" height="30" rx="15" fill="#e53935" fill-opacity=".18" stroke="#e53935"/><text x="123" y="378" text-anchor="middle" fill="#ffb3b1">⚔ Conquest</text>
+      <rect x="192" y="358" width="118" height="30" rx="15" fill="#1e88e5" fill-opacity=".18" stroke="#1e88e5"/><text x="251" y="378" text-anchor="middle" fill="#9fd0fa">🧠 Reasoning</text>
+      <rect x="320" y="358" width="118" height="30" rx="15" fill="#43a047" fill-opacity=".18" stroke="#43a047"/><text x="379" y="378" text-anchor="middle" fill="#a5e3a7">🤝 Diplomacy</text>
+      <rect x="448" y="358" width="118" height="30" rx="15" fill="#f2c14e" fill-opacity=".16" stroke="#f2c14e"/><text x="507" y="378" text-anchor="middle" fill="#f5d27e">🚀 Space race</text>
+    </g>
+  </g>
+</svg>
